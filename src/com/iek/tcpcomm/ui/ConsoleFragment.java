@@ -1,11 +1,14 @@
 package com.iek.tcpcomm.ui;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
@@ -29,7 +32,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.iek.tcpcomm.R;
-import com.iek.tcpcomm.task.CommunicationThread;
 import com.iek.tcpcomm.task.NetworkHandler;
 import com.iek.tcpcomm.ui.adapters.MultipleViewAdapter;
 
@@ -40,34 +42,40 @@ public class ConsoleFragment extends Fragment {
 	private String mHost = "192.168.0.9";
 	private String mPort = "9999";
 	private TextView mHostTextView;
+	private NetworkHandler mNwHndlr;
 
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mHostTextView = new TextView(getActivity());
-		EditText messageEditText = new EditText(getActivity());
+		TextView subtitle1 = new TextView(getActivity());
 		View v = inflater.inflate(R.layout.fragment_main, null);
+		final EditText cmdEdit = (EditText) v.findViewById(R.id.cmdEdit);
 		MultipleViewAdapter adapter = new MultipleViewAdapter();
+		cmdEdit.setImeActionLabel("Send", KeyEvent.KEYCODE_ENTER);
+		cmdEdit.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == KeyEvent.KEYCODE_ENTER) {
+					sendMessage(cmdEdit.getText());
+					return true;
+				}
+				return false;
+			}
+		});
 		mListView = (ListView) v.findViewById(R.id.listView);
 		mHostTextView.setText("Host is: " + mHost + " : " + mPort);
 		mHostTextView.setLayoutParams(new AbsListView.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT));
-		messageEditText.setOnEditorActionListener(new OnEditorActionListener() {
-
-			@Override
-			public boolean onEditorAction(TextView v, int actionId,
-					KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-					sendMessage(v.getText());
-				}
-				return false;
-			}
-		});
-		adapter.setViewList(new ArrayList<View>());
+		subtitle1.setLayoutParams(new AbsListView.LayoutParams(
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT));
 		adapter.getViewList().add(mHostTextView);
-		adapter.getViewList().add(messageEditText);
+		adapter.getViewList().add(subtitle1);
 		for (View vv : adapter.getViewList()) {
 			vv.setPadding(0, 5, 0, 5);
 		}
@@ -103,8 +111,8 @@ public class ConsoleFragment extends Fragment {
 									if (InetAddressUtils.isIPv4Address(addr)) {
 										mHost = addr;
 										mPort = port;
-										mHostTextView.setText("Host is: " + mHost + ":"
-												+ mPort);
+										mHostTextView.setText("Host is: "
+												+ mHost + ":" + mPort);
 									}
 								}
 							});
@@ -127,40 +135,72 @@ public class ConsoleFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 		sendMessage("hola");
-		listenerThread = new Thread(new Runnable() {
+	}
+
+	private void sendMessage(final CharSequence text) {
+		TextView t = new TextView(getActivity());
+		t.setLayoutParams(new AbsListView.LayoutParams(
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT));
+		t.setText("> " + text);
+		((MultipleViewAdapter) mListView.getAdapter()).getViewList().add(t);
+		((MultipleViewAdapter) mListView.getAdapter()).notifyDataSetChanged();
+		new Thread(new Runnable() {
+			Socket mSocket;
 
 			@Override
 			public void run() {
-				Socket s = null;
 				try {
-					serverSocket = new ServerSocket(6000);
-				} catch (IOException e) {
-					Log.e("ConsoleFragment", e.getMessage());
-				}
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						s = serverSocket.accept();
-						Thread t2 = new Thread(new CommunicationThread(s,
-								new Observer() {
+					if (mSocket == null) {
+						mSocket = new Socket(mHost, Integer.parseInt(mPort));
+					}
+					InputStream in = mSocket.getInputStream();
+					byte[] buff = new byte[1024];
+					int bread = 0;
+					final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
+							1024);
+					PrintWriter pw = new PrintWriter(new BufferedWriter(
+							new OutputStreamWriter(mSocket.getOutputStream())));
+					pw.println(text);
+					pw.flush();
+					final long st = System.currentTimeMillis();
+					while ((bread = in.read(buff)) != -1) {
+						ostream.write(buff, 0, bread);
+						ConsoleFragment.this.getActivity().runOnUiThread(
+								new Runnable() {
 
 									@Override
-									public void update(Observable observable,
-											Object data) {
+									public void run() {
+										String s = "";
+										long end = System.currentTimeMillis();
+										try {
+											s = ostream.toString("UTF-8");
+											s = s.replace("\n", "");
+											s += "\n" + (end - st) / 1000f
+													+ " s";
+										} catch (UnsupportedEncodingException e) {
+											Log.e("SVRRESP", e.getMessage());
+										}
+										TextView t = new TextView(getActivity());
+										t.setLayoutParams(new AbsListView.LayoutParams(
+												ViewGroup.LayoutParams.MATCH_PARENT,
+												ViewGroup.LayoutParams.WRAP_CONTENT));
+										t.setText(s);
+										MultipleViewAdapter adapter = ((MultipleViewAdapter) mListView
+												.getAdapter());
+										adapter.getViewList().add(t);
+										adapter.notifyDataSetChanged();
+										mListView
+												.smoothScrollToPosition(adapter
+														.getCount() - 1);
 									}
-								}));
-						t2.start();
-					} catch (IOException e) {
-						Log.e("ConsoleFragment", e.getMessage());
+								});
 					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+
 			}
-		});
-		// listenerThread.start();
+		}).start();
 	}
-
-	private void sendMessage(CharSequence text) {
-		NetworkHandler nh = new NetworkHandler();
-		nh.execute(mHost, mPort, text + "");
-	}
-
 }

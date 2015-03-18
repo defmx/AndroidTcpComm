@@ -1,5 +1,6 @@
 package com.iek.tcpcomm.ui.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.view.View;
@@ -10,6 +11,7 @@ public class MultipleViewAdapter extends BaseAdapter {
 	private List<View> m_viewList;
 
 	public MultipleViewAdapter() {
+		m_viewList = new ArrayList<View>();
 	}
 
 	@Override
