@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TcpCommunication</string>
-    <string name="title_section1">Console</string>
-    <string name="title_section2"></string>
-    <string name="title_section3">Settings</string>
+    <string name="app_name">Kinex App</string>
+    <string name="title_section0">Inicio</string>
+    <string name="title_section1">Estadísticas</string>
+    <string name="title_section2">Metas</string>
+    <string name="title_section3">Parámetros</string>
+    <string name="title_section4">Gráfica</string>
+    <string name="title_section5">Paros</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -13,8 +16,47 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    <string name="connect">Connect</string>
+    <string name="send">Enviar</string>
+    <string name="save">Guardar</string>
     <string name="cancel">Cancel</string>
     <string name="sethost">Set host</string>
     <string name="exipaddr">E.g. 127.0.0.1:8080</string>
+    <!-- rythm -->
+    <string name="productionrythm">Ritmo de producción</string>
+    <string name="linearmetersperturn"> Metros lineales por turno</string>
+    <string name="instantspeed">Velocidad instantánea</string>
+    <string name="deadtimepershift">Tiempo muerto por turno</string>
+    <!-- facts -->
+    <string name="actualspeed">Velocidad actual</string>
+    <string name="averagespeed">Velocidad promedio</string>
+    <string name="deadtimetotal">Total tiempo muerto</string>
+    <string name="linearmeterstotal">Total metros lineales</string>
+    <string name="laststop">Último paro</string>
+    <string name="elapsed">Duración</string>
+    <!-- parameters -->
+    <string name="wheeldiameter">Diámetro de rueda</string>
+    <string name="syncclock">Sincronizar reloj</string>
+    <string name="shifts">Turnos</string>
+    <string name="first">Primero</string>
+    <string name="second">Segundo</string>
+    <string name="third">Tercero</string>
+    <string name="start">Inicio</string>
+    <string name="end">Fin</string>
+    <string name="actual">Actual</string>
+    <string name="neww">Nuevo</string>
+    <string name="graphic">Gráfica</string>
+    <!-- stops -->
+    <string name="addreasonforstop">Agregar causa de paro</string>
+    <string name="existentreasons">Causas existentes</string>
+    <string-array name="stopreasons">
+        <item>Razón 1</item>
+        <item>Razón 2</item>
+        <item>Razón 3</item>
+        <item>Razón 4</item>
+        <item>Razón 5</item>
+    </string-array>
+    <string name="report">Reporte</string>
+    <string name="reportdate">Fecha reporte</string>
 
 </resources>

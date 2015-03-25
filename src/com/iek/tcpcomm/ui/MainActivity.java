@@ -1,41 +1,22 @@
 package com.iek.tcpcomm.ui;
 
-import com.iek.tcpcomm.R;
-import com.iek.tcpcomm.R.id;
-import com.iek.tcpcomm.R.layout;
-import com.iek.tcpcomm.R.menu;
-import com.iek.tcpcomm.R.string;
-
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+
+import com.iek.tcpcomm.R;
+import com.iek.tcpcomm.data.LocalDb;
+import com.iek.tcpcomm.stat.M;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-	/**
-	 * Fragment managing the behaviors, interactions and presentation of the
-	 * navigation drawer.
-	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
-
-	/**
-	 * Used to store the last screen title. For use in
-	 * {@link #restoreActionBar()}.
-	 */
 	private CharSequence mTitle;
 
 	@Override
@@ -50,6 +31,7 @@ public class MainActivity extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+		M.m().setLocaldb(new LocalDb(this, "ldb", null, 1));
 	}
 
 	@Override
@@ -57,7 +39,22 @@ public class MainActivity extends Activity implements
 		Fragment f;
 		switch (position) {
 		case 0:
+			f = new ConnectFragment();
+			break;
+		case 1:
 			f = new ConsoleFragment();
+			break;
+		case 2:
+			f = new RythmFragment();
+			break;
+		case 3:
+			f = new ParamsFragment();
+			break;
+		case 4:
+			f = new GraphicFragment();
+			break;
+		case 5:
+			f = new StopsFragment();
 			break;
 		default:
 			f = null;
@@ -81,12 +78,17 @@ public class MainActivity extends Activity implements
 		case 3:
 			mTitle = getString(R.string.title_section3);
 			break;
+		case 4:
+			mTitle = getString(R.string.title_section4);
+			break;
+		case 5:
+			mTitle = getString(R.string.title_section5);
+			break;
 		}
 	}
 
 	public void restoreActionBar() {
 		ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(mTitle);
 	}
@@ -94,9 +96,6 @@ public class MainActivity extends Activity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mNavigationDrawerFragment.isDrawerOpen()) {
-			// Only show items in the action bar relevant to this screen
-			// if the drawer is not showing. Otherwise, let the drawer
-			// decide what to show in the action bar.
 			getMenuInflater().inflate(R.menu.main, menu);
 			restoreActionBar();
 			return true;
@@ -106,9 +105,6 @@ public class MainActivity extends Activity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

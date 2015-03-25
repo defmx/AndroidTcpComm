@@ -8,6 +8,9 @@
 package com.iek.tcpcomm;
 
 public final class R {
+    public static final class array {
+        public static final int stopreasons=0x7f060000;
+    }
     public static final class attr {
     }
     public static final class dimen {
@@ -33,38 +36,96 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f080005;
-        public static final int cmdEdit=0x7f080004;
-        public static final int container=0x7f080001;
-        public static final int drawer_layout=0x7f080000;
-        public static final int listView=0x7f080003;
-        public static final int navigation_drawer=0x7f080002;
+        public static final int action_settings=0x7f090014;
+        public static final int actualwheeldiameterTextView=0x7f090005;
+        public static final int addStopCauseEdit=0x7f090012;
+        public static final int avgspeedEdit=0x7f090010;
+        public static final int connectButton=0x7f090004;
+        public static final int container=0x7f090001;
+        public static final int deadtimeEdit=0x7f090011;
+        public static final int drawer_layout=0x7f090000;
+        public static final int existingReasonsSpinner=0x7f090013;
+        public static final int firstshftend=0x7f090009;
+        public static final int firstshftstart=0x7f090008;
+        public static final int hostEdit=0x7f090003;
+        public static final int instspeedEdit=0x7f09000f;
+        public static final int linmetEdit=0x7f09000e;
+        public static final int navigation_drawer=0x7f090002;
+        public static final int newWheelDiamEdit=0x7f090006;
+        public static final int secshftend=0x7f09000b;
+        public static final int secshftstart=0x7f09000a;
+        public static final int syncClockButton=0x7f090007;
+        public static final int thirdshftend=0x7f09000d;
+        public static final int thirdshftstart=0x7f09000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int fragment_main=0x7f030001;
-        public static final int fragment_navigation_drawer=0x7f030002;
+        public static final int connect_fragment=0x7f030001;
+        public static final int fragment_main=0x7f030002;
+        public static final int fragment_navigation_drawer=0x7f030003;
+        public static final int params_fragment=0x7f030004;
+        public static final int prodrythm_fragment=0x7f030005;
+        public static final int stops_fragment=0x7f030006;
     }
     public static final class menu {
-        public static final int global=0x7f070000;
-        public static final int main=0x7f070001;
+        public static final int global=0x7f080000;
+        public static final int main=0x7f080001;
     }
     public static final class string {
-        public static final int action_example=0x7f050006;
-        public static final int action_settings=0x7f050007;
+        public static final int action_example=0x7f050009;
+        public static final int action_settings=0x7f05000a;
+        public static final int actual=0x7f050027;
+        /**  facts 
+         */
+        public static final int actualspeed=0x7f050019;
+        /**  stops 
+         */
+        public static final int addreasonforstop=0x7f05002a;
         public static final int app_name=0x7f050000;
-        public static final int cancel=0x7f05000c;
-        public static final int entermessage=0x7f050008;
-        public static final int exipaddr=0x7f05000e;
-        public static final int navigation_drawer_close=0x7f050005;
-        public static final int navigation_drawer_open=0x7f050004;
-        public static final int no=0x7f05000a;
-        public static final int ok=0x7f05000b;
-        public static final int sethost=0x7f05000d;
-        public static final int title_section1=0x7f050001;
-        public static final int title_section2=0x7f050002;
-        public static final int title_section3=0x7f050003;
-        public static final int yes=0x7f050009;
+        public static final int averagespeed=0x7f05001a;
+        public static final int cancel=0x7f050012;
+        public static final int connect=0x7f05000f;
+        public static final int deadtimepershift=0x7f050018;
+        public static final int deadtimetotal=0x7f05001b;
+        public static final int elapsed=0x7f05001e;
+        public static final int end=0x7f050026;
+        public static final int entermessage=0x7f05000b;
+        public static final int exipaddr=0x7f050014;
+        public static final int existentreasons=0x7f05002b;
+        public static final int first=0x7f050022;
+        public static final int graphic=0x7f050029;
+        public static final int instantspeed=0x7f050017;
+        public static final int laststop=0x7f05001d;
+        public static final int linearmetersperturn=0x7f050016;
+        public static final int linearmeterstotal=0x7f05001c;
+        public static final int navigation_drawer_close=0x7f050008;
+        public static final int navigation_drawer_open=0x7f050007;
+        public static final int neww=0x7f050028;
+        public static final int no=0x7f05000d;
+        public static final int ok=0x7f05000e;
+        /**  rythm 
+         */
+        public static final int productionrythm=0x7f050015;
+        public static final int report=0x7f05002c;
+        public static final int reportdate=0x7f05002d;
+        public static final int save=0x7f050011;
+        public static final int second=0x7f050023;
+        public static final int send=0x7f050010;
+        public static final int sethost=0x7f050013;
+        public static final int shifts=0x7f050021;
+        public static final int start=0x7f050025;
+        public static final int syncclock=0x7f050020;
+        public static final int third=0x7f050024;
+        public static final int title_section0=0x7f050001;
+        public static final int title_section1=0x7f050002;
+        public static final int title_section2=0x7f050003;
+        public static final int title_section3=0x7f050004;
+        public static final int title_section4=0x7f050005;
+        public static final int title_section5=0x7f050006;
+        /**  parameters 
+         */
+        public static final int wheeldiameter=0x7f05001f;
+        public static final int yes=0x7f05000c;
     }
     public static final class style {
         /** 
@@ -88,10 +149,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f070001;
     }
 }
