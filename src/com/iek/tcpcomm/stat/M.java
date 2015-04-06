@@ -8,6 +8,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Observer;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -29,6 +32,10 @@ public class M {
 
 	public static M m() {
 		return m;
+	}
+
+	public static class catalog {
+		public static Map<String, String> settings;
 	}
 
 	public void sendMessage(final Observer observer, final CharSequence text) {
@@ -58,17 +65,17 @@ public class M {
 						try {
 							s = ostream.toString("UTF-8");
 							s = s.replace("\n", "");
-							s += " (" + (end - st) / 1000f + " s)";
 							Log.i("SVRRESP", s);
 							if (observer != null) {
-								observer.update(null, s);
+								observer.update(null, new BoardResponse(s,
+										(end - st) / 1000f));
 							}
 						} catch (UnsupportedEncodingException e) {
 							Log.e("SVRRESP", e.getMessage());
 						}
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					Log.e("SendMsg", e.getMessage());
 				}
 
 			}
@@ -107,5 +114,14 @@ public class M {
 		this.localdb = localdb;
 		this.db = localdb.getWritableDatabase();
 		localdb.onCreate(db);
+	}
+
+	public void loadCatalogs() {
+		catalog.settings = new HashMap<String, String>();
+		List<CatRow> l = getLocaldb().selectCat("settings");
+		for (CatRow c : l) {
+			catalog.settings.put(c.getName(), c.getValue());
+		}
+
 	}
 }

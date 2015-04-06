@@ -22,6 +22,8 @@
     <string name="cancel">Cancel</string>
     <string name="sethost">Set host</string>
     <string name="exipaddr">E.g. 127.0.0.1:8080</string>
+    <string name="connectionwassuccessful">Connect OK</string>
+    <string name="addressisinvalid">Address is invalid</string>
     <!-- rythm -->
     <string name="productionrythm">Ritmo de producción</string>
     <string name="linearmetersperturn"> Metros lineales por turno</string>
@@ -49,6 +51,7 @@
     <!-- stops -->
     <string name="addreasonforstop">Agregar causa de paro</string>
     <string name="existentreasons">Causas existentes</string>
+
     <string-array name="stopreasons">
         <item>Razón 1</item>
         <item>Razón 2</item>
@@ -56,6 +59,7 @@
         <item>Razón 4</item>
         <item>Razón 5</item>
     </string-array>
+
     <string name="report">Reporte</string>
     <string name="reportdate">Fecha reporte</string>
 

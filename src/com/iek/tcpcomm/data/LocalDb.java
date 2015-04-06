@@ -1,5 +1,8 @@
 package com.iek.tcpcomm.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +11,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.util.SparseArray;
+
+import com.iek.tcpcomm.stat.CatRow;
 
 public class LocalDb extends SQLiteOpenHelper {
 
@@ -23,8 +27,8 @@ public class LocalDb extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		this.db = db;
-		String q1 = "CREATE TABLE IF NOT EXISTS params(_id integer primary key autoincrement,name text unique,value text)";
-		String q2 = "CREATE TABLE IF NOT EXISTS stopreasons(_id integer primary key autoincrement,name text unique)";
+		String q1 = "CREATE TABLE IF NOT EXISTS settings(_id integer primary key autoincrement,name text unique,value text)";
+		String q2 = "CREATE TABLE IF NOT EXISTS cstopreasons(_id integer primary key autoincrement,name text unique)";
 		try {
 			if (db.isOpen()) {
 				db.execSQL(q1);
@@ -53,6 +57,7 @@ public class LocalDb extends SQLiteOpenHelper {
 			} else {
 				count = db.update(table, cv, where, null);
 			}
+			db.setTransactionSuccessful();
 		} catch (SQLiteException e) {
 			Log.e("LocalDb", e.getMessage());
 		} finally {
@@ -60,17 +65,16 @@ public class LocalDb extends SQLiteOpenHelper {
 		return count;
 	}
 
-	public SparseArray<String> selectCat(String table, String where) {
-		SparseArray<String> s = new SparseArray<String>();
-		String q = "SELECT _id,name FROM " + table;
-		if (where != null && !where.equals("")) {
-			q += " WHERE " + where;
-		}
+	public List<CatRow> selectCat(String table) {
+		List<CatRow> s = new ArrayList<CatRow>();
+		String q = "SELECT _id,name,value FROM " + table;
 		try {
 			Cursor c = db.rawQuery(q, null);
 			if (c.moveToFirst()) {
 				do {
-					s.append(c.getInt(0), c.getString(1));
+					CatRow cr = new CatRow(c.getInt(0), c.getString(1),
+							c.getString(0));
+					s.add(cr);
 				} while (c.moveToNext());
 			}
 		} catch (SQLiteException e) {
