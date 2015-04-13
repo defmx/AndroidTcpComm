@@ -24,6 +24,9 @@
     <string name="exipaddr">E.g. 127.0.0.1:8080</string>
     <string name="connectionwassuccessful">Connect OK</string>
     <string name="addressisinvalid">Address is invalid</string>
+    <string name="couldnotconnecttohost">Could not connect to host</string>
+    <string name="host">Host</string>
+    <string name="hosts">Hosts</string>
     <!-- rythm -->
     <string name="productionrythm">Ritmo de producción</string>
     <string name="linearmetersperturn"> Metros lineales por turno</string>

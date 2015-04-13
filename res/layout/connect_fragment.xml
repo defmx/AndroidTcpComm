@@ -7,23 +7,45 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:contentDescription="@string/ok"
-        android:padding="10sp"
+        android:padding="15sp"
         android:src="@drawable/ic_launcher" />
 
-    <EditText
-        android:id="@+id/hostEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/exipaddr"
-        android:inputType="textUri"
-        android:padding="10sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/connectButton"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/host"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/hostEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/exipaddr"
+            android:inputType="textUri"
+            android:padding="10sp" />
+
+        <Button
+            android:id="@+id/connectButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:text="@string/connect"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hostsLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10sp"
-        android:text="@string/connect" />
+        android:text="@string/hosts"
+        android:textSize="12sp" />
 
 </LinearLayout>

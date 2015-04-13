@@ -16,6 +16,7 @@ import java.util.Observer;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.iek.tcpcomm.R;
 import com.iek.tcpcomm.data.LocalDb;
 
 public class M {
@@ -76,6 +77,9 @@ public class M {
 					}
 				} catch (IOException e) {
 					Log.e("SendMsg", e.getMessage());
+					if (observer != null) {
+						observer.update(null, R.string.couldnotconnecttohost);
+					}
 				}
 
 			}

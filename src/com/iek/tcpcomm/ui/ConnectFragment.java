@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iek.tcpcomm.R;
@@ -28,46 +29,74 @@ public class ConnectFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.connect_fragment, container, false);
 		final EditText e = (EditText) v.findViewById(R.id.hostEdit);
+		final TextView hostsV = (TextView) v.findViewById(R.id.hostsLink);
 		Button b = (Button) v.findViewById(R.id.connectButton);
 
-		b.setOnClickListener(new OnClickListener() {
+		hostsV.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				String addr = e.getText().toString();
-				String port = "";
+
+			}
+		});
+
+		b.setOnClickListener(new OnClickListener() {
+
+			private String maddr;
+			private String mport;
+
+			@Override
+			public void onClick(View arg0) {
+				maddr = e.getText().toString();
+				mport = "";
 				try {
-					port = addr.split(":")[1];
-					addr = addr.split(":")[0];
+					mport = maddr.split(":")[1];
+					maddr = maddr.split(":")[0];
 				} catch (ArrayIndexOutOfBoundsException e) {
 					Toast.makeText(getActivity(), R.string.addressisinvalid,
 							Toast.LENGTH_SHORT).show();
 				}
-				if (InetAddressUtils.isIPv4Address(addr)) {
-					M.m().setHost(addr);
-					M.m().setPort(Integer.parseInt(port));
-					Toast.makeText(getActivity(),
-							"Host: " + addr + ", Puerto: " + port,
-							Toast.LENGTH_SHORT).show();
-					ContentValues cv = new ContentValues();
-					cv.put("name", "hostip");
-					cv.put("value", addr);
-					M.m().getLocaldb().insOrUpd("settings", cv, null);
-					cv.put("name", "hostport");
-					cv.put("value", port);
-					M.m().getLocaldb().insOrUpd("settings", cv, null);
-				}
+				M.m().setHost(maddr);
+				M.m().setPort(Integer.parseInt(mport));
 				M.m().sendMessage(new Observer() {
 
 					@Override
-					public void update(Observable arg0, Object arg1) {
+					public void update(Observable arg0, final Object arg1) {
 						if (arg1 instanceof BoardResponse) {
 							BoardResponse r = (BoardResponse) arg1;
 							if (r.getMessage() != null
 									&& r.getMessage().equals("")) {
-								Toast.makeText(getActivity(),
-										R.string.connectionwassuccessful,
-										Toast.LENGTH_SHORT).show();
+								getActivity().runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										if (InetAddressUtils
+												.isIPv4Address(maddr)) {
+											ContentValues cv = new ContentValues();
+											cv.put("name", "hostip");
+											cv.put("value", maddr);
+											M.m()
+													.getLocaldb()
+													.insOrUpd("settings", cv,
+															"w");
+											cv.clear();
+											cv.put("name", "hostport");
+											cv.put("value", mport);
+											M.m()
+													.getLocaldb()
+													.insOrUpd("settings", cv,
+															"w");
+											M.m()
+													.getLocaldb()
+													.insOrUpd("hosts", cv, null);
+										}
+										Toast.makeText(
+												getActivity(),
+												R.string.connectionwassuccessful,
+												Toast.LENGTH_SHORT).show();
+									}
+								});
+
 								new Thread(new Runnable() {
 
 									@Override
@@ -81,6 +110,16 @@ public class ConnectFragment extends Fragment {
 									}
 								}).start();
 							}
+						} else if (arg1 instanceof Integer) {
+							getActivity().runOnUiThread(new Runnable() {
+
+								@Override
+								public void run() {
+									Toast.makeText(getActivity(),
+											(Integer) arg1, Toast.LENGTH_SHORT)
+											.show();
+								}
+							});
 						}
 					}
 				}, "H");

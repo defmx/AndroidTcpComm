@@ -21,18 +21,19 @@ public class LocalDb extends SQLiteOpenHelper {
 	public LocalDb(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		this.db = db;
 		String q1 = "CREATE TABLE IF NOT EXISTS settings(_id integer primary key autoincrement,name text unique,value text)";
-		String q2 = "CREATE TABLE IF NOT EXISTS cstopreasons(_id integer primary key autoincrement,name text unique)";
+		String q3 = "CREATE TABLE IF NOT EXISTS hosts(_id integer primary key autoincrement,name text unique,value text)";
+		String q2 = "CREATE TABLE IF NOT EXISTS cstopreasons(_id integer primary key autoincrement,name text unique,value text)";
 		try {
 			if (db.isOpen()) {
 				db.execSQL(q1);
 				db.execSQL(q2);
+				db.execSQL(q3);
 			}
 		} catch (SQLiteException e) {
 			Log.e("LocalDb", e.getMessage());
@@ -52,8 +53,17 @@ public class LocalDb extends SQLiteOpenHelper {
 		try {
 			db.beginTransaction();
 			if (!cv.containsKey("_id")) {
-				db.insert(table, null, cv);
-				count = 1;
+				if (cv.containsKey("name")) {
+					String n = cv.getAsString("name");
+					count = db.update(table, cv, "name=?", new String[] { n });
+					if (count == 0) {
+						db.insert(table, null, cv);
+						count = 1;
+					}
+				} else {
+					db.insert(table, null, cv);
+					count = 1;
+				}
 			} else {
 				count = db.update(table, cv, where, null);
 			}
@@ -61,6 +71,7 @@ public class LocalDb extends SQLiteOpenHelper {
 		} catch (SQLiteException e) {
 			Log.e("LocalDb", e.getMessage());
 		} finally {
+			db.endTransaction();
 		}
 		return count;
 	}

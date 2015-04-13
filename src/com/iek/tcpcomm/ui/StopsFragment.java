@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.Fragment;
 import android.content.ContentValues;
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.iek.tcpcomm.R;
+import com.iek.tcpcomm.stat.CatRow;
 import com.iek.tcpcomm.stat.M;
 
 public class StopsFragment extends Fragment {
@@ -38,7 +38,7 @@ public class StopsFragment extends Fragment {
 				if (arg1 == 6) {
 					ContentValues cv = new ContentValues();
 					cv.put("name", e1.getText().toString());
-					M.m().getLocaldb().insOrUpd("stopreasons", cv, "");
+					M.m().getLocaldb().insOrUpd("cstopreasons", cv, "");
 					retrieveReasons(t1);
 					Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT)
 							.show();
@@ -67,11 +67,11 @@ public class StopsFragment extends Fragment {
 	}
 
 	private void retrieveReasons(Spinner spinner) {
-		SparseArray<String> s = M.m().getLocaldb()
-				.selectCat("stopreasons", null);
+		List<CatRow> s = M.m().getLocaldb()
+				.selectCat("cstopreasons");
 		List<String> lreasons = new ArrayList<String>();
 		for (int i = 0; i < s.size(); i++) {
-			lreasons.add(s.get(s.keyAt(i)));
+			lreasons.add(s.get(i).getName());
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_spinner_item, lreasons);
