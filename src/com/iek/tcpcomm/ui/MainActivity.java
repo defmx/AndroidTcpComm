@@ -33,9 +33,6 @@ public class MainActivity extends Activity implements
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 		M.m().setLocaldb(new LocalDb(this, "ldb", null, 1));
 		M.m().loadCatalogs();
-		String host;
-		String port;
-		host=M.catalog.settings.get("hostip");
 	}
 
 	@Override

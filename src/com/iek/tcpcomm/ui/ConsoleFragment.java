@@ -1,5 +1,7 @@
 package com.iek.tcpcomm.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,40 +12,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.TextView;
 
 import com.iek.tcpcomm.R;
+import com.iek.tcpcomm.stat.BoardResponse;
 import com.iek.tcpcomm.stat.M;
-import com.iek.tcpcomm.ui.adapters.MultipleViewAdapter;
 
 public class ConsoleFragment extends Fragment {
-	private String mHost = "192.168.0.9";
-	private String mPort = "9999";
-	private TextView mHostTextView;
+	private TextView mactualSpeedText;
+	private TextView mavgSpeedText;
+	private TextView mdeadTimeText;
+	private TextView mlinMtsText;
+	private TextView mlastStopText;
 	private Thread mThr;
 
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mHostTextView = new TextView(getActivity());
-		TextView subtitle1 = new TextView(getActivity());
 		View v = inflater.inflate(R.layout.fragment_main, null);
-		MultipleViewAdapter adapter = new MultipleViewAdapter();
-		mHostTextView.setText("Host is: " + mHost + " : " + mPort);
-		mHostTextView.setLayoutParams(new AbsListView.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT));
-		subtitle1.setLayoutParams(new AbsListView.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT));
-		adapter.getViewList().add(mHostTextView);
-		adapter.getViewList().add(subtitle1);
-		for (View vv : adapter.getViewList()) {
-			vv.setPadding(0, 5, 0, 5);
-		}
-		
+		mactualSpeedText = (TextView) v.findViewById(R.id.actualSpeedText);
+		mavgSpeedText = (TextView) v.findViewById(R.id.avgSpeedText);
+		mdeadTimeText = (TextView) v.findViewById(R.id.deadTimeText);
+		mlinMtsText = (TextView) v.findViewById(R.id.linMtsText);
+		mlastStopText = (TextView) v.findViewById(R.id.lastStopText);
+
 		return v;
 	}
 
@@ -61,12 +54,56 @@ public class ConsoleFragment extends Fragment {
 
 							@Override
 							public void update(Observable observable,
-									Object data) {
+									final Object data) {
+								if (getActivity() == null) {
+									return;
+								}
+								getActivity().runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										if (data instanceof BoardResponse) {
+											BoardResponse br = (BoardResponse) data;
+											double v, vm, dt, d;
+											String[] parts;
+											try {
+												parts = br.getMessage().split(
+														",");
+												v = Double
+														.parseDouble(parts[0]);
+												mactualSpeedText
+														.setText("" + v);
+												vm = Double
+														.parseDouble(parts[1]);
+												mavgSpeedText.setText("" + vm);
+												dt = Double
+														.parseDouble(parts[2]);
+												mdeadTimeText.setText("" + dt);
+												d = Double
+														.parseDouble(parts[3]);
+												mlinMtsText.setText("" + d);
+											} catch (ArrayIndexOutOfBoundsException e) {
+												Log.e("Console", e.getMessage());
+											}
+										} else if (data instanceof Integer) {
+											Calendar c = Calendar.getInstance();
+											SimpleDateFormat format1 = new SimpleDateFormat(
+													"yyyy-MM-dd @ hh:mm:ss");
+											mlastStopText.setText(format1
+													.format(c.getTime()));
+											try {
+												mThr.join();
+											} catch (InterruptedException e) {
+												e.printStackTrace();
+											}
+										}
+									}
+								});
 
 							}
 						}, "P#");
 					} catch (InterruptedException e) {
-						Log.e("THRRUN", e.getMessage());
+						break;
 					}
 
 				}
@@ -76,10 +113,16 @@ public class ConsoleFragment extends Fragment {
 	}
 
 	@Override
+	public void onDetach() {
+		super.onDetach();
+		mThr.interrupt();
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (mThr != null && mThr.isAlive()) {
-		}
+		M.m().sendMessage(null, "close");
+		mThr.interrupt();
 	}
 
 }

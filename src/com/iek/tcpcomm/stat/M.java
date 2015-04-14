@@ -75,8 +75,8 @@ public class M {
 							Log.e("SVRRESP", e.getMessage());
 						}
 					}
-				} catch (IOException e) {
-					Log.e("SendMsg", e.getMessage());
+				} catch (Exception e) {
+					Log.e("SNDMSG", e.getMessage());
 					if (observer != null) {
 						observer.update(null, R.string.couldnotconnecttohost);
 					}

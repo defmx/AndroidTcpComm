@@ -13,6 +13,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/actualSpeedText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"
@@ -28,6 +29,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/avgSpeedText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"
@@ -43,6 +45,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/deadTimeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"
@@ -58,6 +61,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/linMtsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"
@@ -73,6 +77,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/lastStopText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"
@@ -88,6 +93,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/elapsedText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5sp"

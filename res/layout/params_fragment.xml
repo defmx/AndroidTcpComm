@@ -18,7 +18,7 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/actualwheeldiameterTextView"
+            android:id="@+id/wheelDiamText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5sp"
@@ -26,7 +26,7 @@
             android:textSize="22sp" />
 
         <EditText
-            android:id="@+id/newWheelDiamEdit"
+            android:id="@+id/wheelDiamEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/neww"

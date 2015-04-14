@@ -65,7 +65,7 @@ public class ConnectFragment extends Fragment {
 						if (arg1 instanceof BoardResponse) {
 							BoardResponse r = (BoardResponse) arg1;
 							if (r.getMessage() != null
-									&& r.getMessage().equals("")) {
+									&& !r.getMessage().equals("")) {
 								getActivity().runOnUiThread(new Runnable() {
 
 									@Override
@@ -111,6 +111,9 @@ public class ConnectFragment extends Fragment {
 								}).start();
 							}
 						} else if (arg1 instanceof Integer) {
+							if (getActivity() == null) {
+								return;
+							}
 							getActivity().runOnUiThread(new Runnable() {
 
 								@Override
