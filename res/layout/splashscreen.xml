@@ -27,8 +27,8 @@
             android:id="@+id/imageSplash"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:adjustViewBounds="true"
-            android:src="@drawable/inex_logo" />
+            android:adjustViewBounds="false"
+            android:src="@drawable/ic_launcher" />
 
     </LinearLayout>
 </LinearLayout>

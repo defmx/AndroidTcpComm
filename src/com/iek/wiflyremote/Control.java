@@ -35,6 +35,7 @@ public class Control extends Activity {
 	Socket s;
 	String ip;
 	int port;
+	private boolean keep = true;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,7 +66,7 @@ public class Control extends Activity {
 
 			@Override
 			public void run() {
-				while (true) {
+				while (keep) {
 					try {
 						Thread.sleep(1000);
 						sendMessage("P#");
@@ -102,7 +103,11 @@ public class Control extends Activity {
 			public void run() {
 				try {
 					if (mSocket == null) {
-						mSocket = new Socket(ip, port);
+						mSocket = new Socket();
+						mSocket.connect(new InetSocketAddress(ip, port), 3000);
+						keep = true;
+					} else {
+						keep = true;
 					}
 					InputStream in = mSocket.getInputStream();
 					byte[] buff = new byte[1024];
@@ -123,7 +128,11 @@ public class Control extends Activity {
 							Log.i("SVRRESP", s);
 							runOnUiThread(new Runnable() {
 								public void run() {
-									if (s.startsWith("P#=")) {
+									if (s.startsWith("H")) {
+										Toast.makeText(getApplicationContext(),
+												"Connect OK",
+												Toast.LENGTH_SHORT).show();
+									} else if (s.startsWith("P#=")) {
 										String str = s.replace("P#=", "");
 										double v, vm, dt, d;
 										String[] parts;
@@ -134,8 +143,8 @@ public class Control extends Activity {
 											dt = Double.parseDouble(parts[2]);
 											d = Double.parseDouble(parts[3]);
 											textRight.setText("V=" + v
-													+ ", Vm=" + vm + ", Tm=" + dt
-													+ ", D=" + d);
+													+ ", Vm=" + vm + ", Tm="
+													+ dt + ", D=" + d);
 										} catch (ArrayIndexOutOfBoundsException e) {
 											Log.e("Console", e.getMessage());
 										}
@@ -147,7 +156,20 @@ public class Control extends Activity {
 						}
 					}
 				} catch (Exception e) {
-					Log.e("SNDMSG", e.getMessage());
+					keep = false;
+					Log.i("CONNECT",
+							e.getMessage() == null ? ":(" : e.getMessage());
+					runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							Toast.makeText(getApplicationContext(),
+									"Connect Failed", Toast.LENGTH_SHORT)
+									.show();
+						}
+
+					});
+					finish();
 				}
 
 			}

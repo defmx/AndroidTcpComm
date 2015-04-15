@@ -35,45 +35,4 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/buttonUp"
-            android:layout_width="@dimen/button_direction_size"
-            android:layout_height="@dimen/button_direction_size"
-            android:background="@drawable/button_up" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/buttonLeft"
-                android:layout_width="@dimen/button_direction_size"
-                android:layout_height="@dimen/button_direction_size"
-                android:background="@drawable/button_left" />
-
-            <Button
-                android:layout_width="@dimen/button_direction_size"
-                android:layout_height="@dimen/button_direction_size"
-                android:visibility="invisible" />
-
-            <Button
-                android:id="@+id/buttonRight"
-                android:layout_width="@dimen/button_direction_size"
-                android:layout_height="@dimen/button_direction_size"
-                android:background="@drawable/button_right" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/buttonDown"
-            android:layout_width="@dimen/button_direction_size"
-            android:layout_height="@dimen/button_direction_size"
-            android:background="@drawable/button_down" />
-    </LinearLayout>
-
 </LinearLayout>
