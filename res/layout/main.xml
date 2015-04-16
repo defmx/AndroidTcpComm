@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#db2122"
+    android:background="#0000C9"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center_horizontal"

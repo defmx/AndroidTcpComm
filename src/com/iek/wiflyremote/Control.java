@@ -1,91 +1,199 @@
 package com.iek.wiflyremote;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Control extends Activity {
 	public static final int MESSAGE_DATA_RECEIVE = 0;
 
-	TextView textLeft, textRight;
-
-	Boolean task_state = true;
-	Vibrator vibrator;
+	private TextView textLeft;
+	private TextView textRight;
+	private EditText etGInstVel;
+	private EditText etGAvgVel;
+	private EditText etGLinMet;
+	private EditText etGDeadT;
 
 	Socket s;
 	String ip;
 	int port;
-	private boolean keep = true;
+	private Socket mSocket;
+	private Runnable statsThr = new Runnable() {
+
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					Thread.sleep(1000);
+					sendMessage("P#", false);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	};
+	private Runnable listenThr = new Runnable() {
+
+		@Override
+		public void run() {
+			InputStream in;
+			try {
+				in = mSocket.getInputStream();
+				byte[] buff = new byte[1024];
+				int bread = 0;
+
+				while ((bread = in.read(buff)) != -1) {
+					final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
+							1024);
+					ostream.write(buff, 0, bread);
+					try {
+						final String s = ostream.toString("UTF-8").replace(
+								"\n", "");
+						Log.i("SVRRESP", s);
+						runOnUiThread(new Runnable() {
+							public void run() {
+								if (s.startsWith("H")) {
+								} else if (s.startsWith("P#=")) {
+									String str = s.replace("P#=", "");
+									double v, vm, dt, d;
+									String[] parts;
+									try {
+										parts = str.split(",");
+										v = Double.parseDouble(parts[0]);
+										vm = Double.parseDouble(parts[1]);
+										dt = Double.parseDouble(parts[2]);
+										d = Double.parseDouble(parts[3]);
+										textRight.setText("Velocidad=" + v
+												+ "\n Vel. Media=" + vm
+												+ "\n Tiempo Muerto=" + dt
+												+ "\n Distancia=" + d);
+									} catch (ArrayIndexOutOfBoundsException e) {
+										Log.e("Console", e.getMessage());
+									}
+								}
+							}
+						});
+					} catch (UnsupportedEncodingException e) {
+						Log.e("SVRRESP", e.getMessage());
+					}
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.control);
+		etGInstVel = (EditText) findViewById(R.id.etGInstVel);
+		etGAvgVel = (EditText) findViewById(R.id.etGAvgVel);
+		etGLinMet = (EditText) findViewById(R.id.etGLinMet);
+		etGDeadT = (EditText) findViewById(R.id.etGDeadT);
+		Button btGInstVel = (Button) findViewById(R.id.btGInstVel);
+		Button btGAvgVel = (Button) findViewById(R.id.btGAvgVel);
+		Button btGLinMet = (Button) findViewById(R.id.btGLinMet);
+		Button btGDeadT = (Button) findViewById(R.id.btGDeadT);
+
 		ip = getIntent().getExtras().getString("IP");
 		port = Integer.parseInt(getIntent().getExtras().getString("PORT"));
 
-		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
 		textLeft = (TextView) findViewById(R.id.textLeft);
 		textRight = (TextView) findViewById(R.id.textRight);
-		Runnable readThread = new Runnable() {
 
-			public void run() {
+		btGInstVel.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				int i = 0;
+				try {
+					i = Integer.parseInt(etGInstVel.getText().toString());
+				} catch (NumberFormatException e) {
+					return;
+				}
+				if (i <= 999) {
+					sendMessage("V" + String.format("%03d", i) + "#", true);
+				}
 			}
-		};
-		new Thread(readThread).start();
-		Log.i("Check IP", ip + ":" + port);
+		});
+		btGAvgVel.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				int i = 0;
+				try {
+					i = Integer.parseInt(etGAvgVel.getText().toString());
+				} catch (NumberFormatException e) {
+					return;
+				}
+				if (i <= 999) {
+					sendMessage("A" + String.format("%03d", i) + "#", true);
+				}
+			}
+		});
+		btGLinMet.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				int i = 0;
+				try {
+					i = Integer.parseInt(etGLinMet.getText().toString());
+				} catch (NumberFormatException e) {
+					return;
+				}
+				if (i <= 99999) {
+					sendMessage("M" + String.format("%05d", i) + "#", true);
+				}
+			}
+		});
+		btGDeadT.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				int i;
+				try {
+					i = Integer.parseInt(etGDeadT.getText().toString());
+				} catch (NumberFormatException e) {
+					return;
+				}
+				if (i <= 999) {
+					sendMessage("T" + String.format("%03d", i) + "#", true);
+				}
+			}
+		});
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-
-		Runnable statsThr = new Runnable() {
-
-			@Override
-			public void run() {
-				while (keep) {
-					try {
-						Thread.sleep(1000);
-						sendMessage("P#");
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		sendMessage("H");
-		new Thread(statsThr).start();
+		connect();
 	}
 
 	public void onPause() {
 		super.onPause();
-		task_state = false;
-
 		try {
-			s.close();
+			if (s != null) {
+				s.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NullPointerException e) {
@@ -95,9 +203,39 @@ public class Control extends Activity {
 		finish();
 	}
 
-	public void sendMessage(final String msg) {
+	public void sendMessage(final String msg, final boolean toast) {
 		new Thread(new Runnable() {
-			Socket mSocket;
+
+			@Override
+			public void run() {
+
+				PrintWriter pw;
+				try {
+					pw = new PrintWriter(new BufferedWriter(
+							new OutputStreamWriter(mSocket.getOutputStream())));
+
+					pw.println(msg);
+					pw.flush();
+					if (toast) {
+						runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								Toast.makeText(getApplicationContext(),
+										"Send OK", Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
+					Log.i("SEND", msg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+
+	private void connect() {
+		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -105,58 +243,18 @@ public class Control extends Activity {
 					if (mSocket == null) {
 						mSocket = new Socket();
 						mSocket.connect(new InetSocketAddress(ip, port), 3000);
-						keep = true;
-					} else {
-						keep = true;
-					}
-					InputStream in = mSocket.getInputStream();
-					byte[] buff = new byte[1024];
-					int bread = 0;
-					final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
-							1024);
-					PrintWriter pw = new PrintWriter(new BufferedWriter(
-							new OutputStreamWriter(mSocket.getOutputStream())));
-					pw.println(msg);
-					pw.flush();
-					final long st = System.currentTimeMillis();
-					while ((bread = in.read(buff)) != -1) {
-						ostream.write(buff, 0, bread);
-						long end = System.currentTimeMillis();
-						try {
-							final String s = ostream.toString("UTF-8").replace(
-									"\n", "");
-							Log.i("SVRRESP", s);
-							runOnUiThread(new Runnable() {
-								public void run() {
-									if (s.startsWith("H")) {
-										Toast.makeText(getApplicationContext(),
-												"Connect OK",
-												Toast.LENGTH_SHORT).show();
-									} else if (s.startsWith("P#=")) {
-										String str = s.replace("P#=", "");
-										double v, vm, dt, d;
-										String[] parts;
-										try {
-											parts = str.split(",");
-											v = Double.parseDouble(parts[0]);
-											vm = Double.parseDouble(parts[1]);
-											dt = Double.parseDouble(parts[2]);
-											d = Double.parseDouble(parts[3]);
-											textRight.setText("V=" + v
-													+ ", Vm=" + vm + ", Tm="
-													+ dt + ", D=" + d);
-										} catch (ArrayIndexOutOfBoundsException e) {
-											Log.e("Console", e.getMessage());
-										}
-									}
-								}
-							});
-						} catch (UnsupportedEncodingException e) {
-							Log.e("SVRRESP", e.getMessage());
-						}
+						runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								Toast.makeText(getApplicationContext(),
+										"Connect OK", Toast.LENGTH_SHORT)
+										.show();
+							}
+						});
+						new Thread(listenThr).start();
 					}
 				} catch (Exception e) {
-					keep = false;
 					Log.i("CONNECT",
 							e.getMessage() == null ? ":(" : e.getMessage());
 					runOnUiThread(new Runnable() {
@@ -171,61 +269,8 @@ public class Control extends Activity {
 					});
 					finish();
 				}
-
 			}
 		}).start();
-	}
-
-	public void sendData(String str) {
-		try {
-			s = new Socket();
-			s.connect((new InetSocketAddress(InetAddress.getByName(ip), port)),
-					2000);
-			OutputStream out = s.getOutputStream();
-			out.write(str.getBytes());
-			out.flush();
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					s.getInputStream()));
-			final String strRead = in.readLine();
-			runOnUiThread(new Runnable() {
-				public void run() {
-					if (strRead.startsWith("P#=")) {
-						String str = strRead.replace("P#=", "");
-						double v, vm, dt, d;
-						String[] parts;
-						try {
-							parts = str.split(",");
-							v = Double.parseDouble(parts[0]);
-							vm = Double.parseDouble(parts[1]);
-							dt = Double.parseDouble(parts[2]);
-							d = Double.parseDouble(parts[3]);
-							textRight.setText("V=" + v + ", Vm=" + vm + "Tm="
-									+ dt + "D=" + d);
-						} catch (ArrayIndexOutOfBoundsException e) {
-							Log.e("Console", e.getMessage());
-						}
-					}
-				}
-			});
-
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-			runOnUiThread(new Runnable() {
-				public void run() {
-					Toast.makeText(getApplicationContext(),
-							"Connection Failed", Toast.LENGTH_SHORT).show();
-				}
-			});
-			finish();
-		} catch (NullPointerException e) {
-			Toast.makeText(getApplicationContext(),
-					"Please check your WiFi Connection", Toast.LENGTH_SHORT)
-					.show();
-		}
 	}
 
 }

@@ -10,5 +10,6 @@
     <string name="title_section3">Parámetros</string>
     <string name="title_section4">Gráfica</string>
     <string name="title_section5">Paros</string>
-
+    <string name="send">Enviar</string>
+<string name="goalhint">Enter value</string>
 </resources>
