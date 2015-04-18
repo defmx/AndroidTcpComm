@@ -1,62 +1,42 @@
 package com.iek.wiflyremote;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Observer;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class Control extends Activity {
+import com.iek.wiflyremote.stat.M;
+import com.iek.wiflyremote.ui.NavigationDrawerFragment;
+import com.iek.wiflyremote.ui.StatisticsFragment;
+
+public class Control extends Activity implements
+		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	public static final int MESSAGE_DATA_RECEIVE = 0;
 
-	private TextView textLeft;
-	private TextView textRight;
-	private EditText etGInstVel;
-	private EditText etGAvgVel;
-	private EditText etGLinMet;
-	private EditText etGDeadT;
+	private NavigationDrawerFragment mNavigationDrawerFragment;
 
-	Socket s;
-	String ip;
-	int port;
-	private Socket mSocket;
-	private Runnable statsThr = new Runnable() {
-
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(1000);
-					sendMessage("P#", false);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	};
 	private Runnable listenThr = new Runnable() {
 
 		@Override
 		public void run() {
 			InputStream in;
 			try {
-				in = mSocket.getInputStream();
+				in = M.m().getGlobalSocket().getInputStream();
 				byte[] buff = new byte[1024];
 				int bread = 0;
 
@@ -70,25 +50,11 @@ public class Control extends Activity {
 						Log.i("SVRRESP", s);
 						runOnUiThread(new Runnable() {
 							public void run() {
-								if (s.startsWith("H")) {
-								} else if (s.startsWith("P#=")) {
-									String str = s.replace("P#=", "");
-									double v, vm, dt, d;
-									String[] parts;
-									try {
-										parts = str.split(",");
-										v = Double.parseDouble(parts[0]);
-										vm = Double.parseDouble(parts[1]);
-										dt = Double.parseDouble(parts[2]);
-										d = Double.parseDouble(parts[3]);
-										textRight.setText("Velocidad=" + v
-												+ "\n Vel. Media=" + vm
-												+ "\n Tiempo Muerto=" + dt
-												+ "\n Distancia=" + d);
-									} catch (ArrayIndexOutOfBoundsException e) {
-										Log.e("Console", e.getMessage());
-									}
+								Observer obs = M.m().getBoardRespObserver();
+								if (obs != null) {
+									obs.update(null, s);
 								}
+
 							}
 						});
 					} catch (UnsupportedEncodingException e) {
@@ -101,85 +67,20 @@ public class Control extends Activity {
 		}
 	};
 
+	private CharSequence mTitle;
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		setContentView(R.layout.control);
-		etGInstVel = (EditText) findViewById(R.id.etGInstVel);
-		etGAvgVel = (EditText) findViewById(R.id.etGAvgVel);
-		etGLinMet = (EditText) findViewById(R.id.etGLinMet);
-		etGDeadT = (EditText) findViewById(R.id.etGDeadT);
-		Button btGInstVel = (Button) findViewById(R.id.btGInstVel);
-		Button btGAvgVel = (Button) findViewById(R.id.btGAvgVel);
-		Button btGLinMet = (Button) findViewById(R.id.btGLinMet);
-		Button btGDeadT = (Button) findViewById(R.id.btGDeadT);
 
-		ip = getIntent().getExtras().getString("IP");
-		port = Integer.parseInt(getIntent().getExtras().getString("PORT"));
+		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
+				.findFragmentById(R.id.navigation_drawer);
+		mTitle = getTitle();
 
-		textLeft = (TextView) findViewById(R.id.textLeft);
-		textRight = (TextView) findViewById(R.id.textRight);
-
-		btGInstVel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				int i = 0;
-				try {
-					i = Integer.parseInt(etGInstVel.getText().toString());
-				} catch (NumberFormatException e) {
-					return;
-				}
-				if (i <= 999) {
-					sendMessage("V" + String.format("%03d", i) + "#", true);
-				}
-			}
-		});
-		btGAvgVel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				int i = 0;
-				try {
-					i = Integer.parseInt(etGAvgVel.getText().toString());
-				} catch (NumberFormatException e) {
-					return;
-				}
-				if (i <= 999) {
-					sendMessage("A" + String.format("%03d", i) + "#", true);
-				}
-			}
-		});
-		btGLinMet.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				int i = 0;
-				try {
-					i = Integer.parseInt(etGLinMet.getText().toString());
-				} catch (NumberFormatException e) {
-					return;
-				}
-				if (i <= 99999) {
-					sendMessage("M" + String.format("%05d", i) + "#", true);
-				}
-			}
-		});
-		btGDeadT.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				int i;
-				try {
-					i = Integer.parseInt(etGDeadT.getText().toString());
-				} catch (NumberFormatException e) {
-					return;
-				}
-				if (i <= 999) {
-					sendMessage("T" + String.format("%03d", i) + "#", true);
-				}
-			}
-		});
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
+				(DrawerLayout) findViewById(R.id.drawer_layout));
 	}
 
 	@Override
@@ -187,51 +88,61 @@ public class Control extends Activity {
 		super.onStart();
 		connect();
 	}
-
-	public void onPause() {
-		super.onPause();
-		try {
-			if (s != null) {
-				s.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-
-		finish();
+	
+	@Override
+	public void onNavigationDrawerItemSelected(int position) {
+		// update the main content by replacing fragments
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager
+				.beginTransaction()
+				.replace(R.id.container,
+						new StatisticsFragment()).commit();
 	}
 
-	public void sendMessage(final String msg, final boolean toast) {
-		new Thread(new Runnable() {
+	public void onSectionAttached(int number) {
+		switch (number) {
+		case 1:
+			mTitle = getString(R.string.title_section1);
+			break;
+		case 2:
+			mTitle = getString(R.string.title_section2);
+			break;
+		case 3:
+			mTitle = getString(R.string.title_section3);
+			break;
+		}
+	}
 
-			@Override
-			public void run() {
+	public void restoreActionBar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setTitle(mTitle);
+	}
 
-				PrintWriter pw;
-				try {
-					pw = new PrintWriter(new BufferedWriter(
-							new OutputStreamWriter(mSocket.getOutputStream())));
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (!mNavigationDrawerFragment.isDrawerOpen()) {
+			// Only show items in the action bar relevant to this screen
+			// if the drawer is not showing. Otherwise, let the drawer
+			// decide what to show in the action bar.
+			getMenuInflater().inflate(R.menu.main, menu);
+			restoreActionBar();
+			return true;
+		}
+		return super.onCreateOptionsMenu(menu);
+	}
 
-					pw.println(msg);
-					pw.flush();
-					if (toast) {
-						runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								Toast.makeText(getApplicationContext(),
-										"Send OK", Toast.LENGTH_SHORT).show();
-							}
-						});
-					}
-					Log.i("SEND", msg);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}).start();
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void connect() {
@@ -240,9 +151,13 @@ public class Control extends Activity {
 			@Override
 			public void run() {
 				try {
-					if (mSocket == null) {
-						mSocket = new Socket();
-						mSocket.connect(new InetSocketAddress(ip, port), 3000);
+					if (M.m().getGlobalSocket() == null) {
+						M.m().setGlobalSocket(new Socket());
+						M.m()
+								.getGlobalSocket()
+								.connect(
+										new InetSocketAddress(M.m().getHost(),
+												M.m().getPort()), 3000);
 						runOnUiThread(new Runnable() {
 
 							@Override

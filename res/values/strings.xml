@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">Kinex WiMote</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_section0">Inicio</string>
@@ -11,5 +13,7 @@
     <string name="title_section4">Gráfica</string>
     <string name="title_section5">Paros</string>
     <string name="send">Enviar</string>
-<string name="goalhint">Enter value</string>
+    <string name="goalhint">Enter value</string>
+    <string name="connectionfailed">Connection failed</string>
+
 </resources>

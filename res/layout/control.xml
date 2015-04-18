@@ -1,138 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0000C9"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    tools:context="com.iek.wiflyremote.ui.MainActivity" >
 
-    <requestFocus />
-
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/relative_layout_margin_top" >
+        android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/textLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:text="@string/title_section1"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/text_view_left_text_size"
-            android:textStyle="bold" />
+    <fragment
+        android:id="@+id/navigation_drawer"
+        android:name="com.iek.wiflyremote.ui.NavigationDrawerFragment"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        tools:layout="@layout/fragment_navigation_drawer" />
 
-        <TextView
-            android:id="@+id/textRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textLeft"
-            android:layout_centerVertical="true"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+</android.support.v4.widget.DrawerLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_below="@+id/textRight"
-            android:layout_centerVertical="true"
-            android:text="@string/title_section2"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/text_view_left_text_size"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textRight"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGInstVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-                <Button
-                    android:id="@+id/btGInstVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGAvgVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-                <Button
-                    android:id="@+id/btGAvgVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGLinMet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint"
-                    android:inputType="number"
-                    android:maxLength="5" />
-
-                <Button
-                    android:id="@+id/btGLinMet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGDeadT"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-                <Button
-                    android:id="@+id/btGDeadT"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
-
-</LinearLayout>
