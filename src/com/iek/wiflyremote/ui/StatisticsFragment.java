@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.iek.wiflyremote.R;
@@ -67,6 +64,8 @@ public class StatisticsFragment extends Fragment {
 								+ "\n Distancia=" + d);
 					} catch (ArrayIndexOutOfBoundsException e) {
 						Log.e("Console", e.getMessage());
+					} catch (NumberFormatException e1) {
+						Log.e("Console", e1.getMessage());
 					}
 				}
 			}
