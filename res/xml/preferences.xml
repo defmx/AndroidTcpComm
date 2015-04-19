@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <Preference
+        android:defaultValue="true"
+        android:key="pref_syncclock"
+        android:summary="@string/lastsync" 
+        android:title="@string/syncclock" />
+
+    <ListPreference
+        android:defaultValue="@string/auto"
+        android:summary="@string/auto" 
+        android:dialogTitle="@string/infotoshow"
+        android:entries="@array/infotoshowarray"
+        android:entryValues="@array/infotoshowarrayvalues"
+        android:key="pref_syncConnectionType"
+        android:title="@string/infotoshow" />
+
+</PreferenceScreen>

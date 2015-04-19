@@ -15,5 +15,31 @@
     <string name="send">Enviar</string>
     <string name="goalhint">Enter value</string>
     <string name="connectionfailed">Connection failed</string>
+    <string name="instantspeed">Velocidad instantánea</string>
+    <string name="averagespeed">Velocidad promedio</string>
+    <string name="linearmetersperturn">Metros lineales por turno</string>
+    <string name="deadtime">Tiempo muerto</string>
+    <string name="factor">Factor</string>
+    <string name="syncclock">Sincronizar reloj</string>
+    <string name="infotoshow">Información a mostrar</string>
+    <string name="auto">Automático</string>
+    <string name="lastsync">Última sincronización: ninguna</string>
+    
 
+    <string-array name="infotoshowarray">
+        <item>Automático</item>
+        <item>Velocidad instantánea</item>
+        <item>Velocidad promedio</item>
+        <item>Metros lineales</item>
+        <item>Tiempo muerto</item>
+        <item>Hora</item>
+    </string-array>
+    <string-array name="infotoshowarrayvalues">
+        <item>Ma</item>
+        <item>Mv</item>
+        <item>Mu</item>
+        <item>Md</item>
+        <item>Mt</item>
+        <item>Mh</item>
+    </string-array>
 </resources>

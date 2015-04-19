@@ -10,8 +10,8 @@ import java.util.Observer;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -21,7 +21,10 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.iek.wiflyremote.stat.M;
+import com.iek.wiflyremote.ui.GoalsFragment;
+import com.iek.wiflyremote.ui.GraphicFragment;
 import com.iek.wiflyremote.ui.NavigationDrawerFragment;
+import com.iek.wiflyremote.ui.PreferenceFragment;
 import com.iek.wiflyremote.ui.StatisticsFragment;
 
 public class Control extends Activity implements
@@ -88,15 +91,28 @@ public class Control extends Activity implements
 		super.onStart();
 		connect();
 	}
-	
+
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
-		// update the main content by replacing fragments
+		Fragment f = null;
+		switch (position) {
+		case 0:
+			f = new StatisticsFragment();
+			break;
+		case 1:
+			f = new GoalsFragment();
+			break;
+		case 2:
+			f = new GraphicFragment();
+			break;
+		case 3:
+			f = new PreferenceFragment();
+			break;
+		default:
+			return;
+		}
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						new StatisticsFragment()).commit();
+		fragmentManager.beginTransaction().replace(R.id.container, f).commit();
 	}
 
 	public void onSectionAttached(int number) {
@@ -108,14 +124,14 @@ public class Control extends Activity implements
 			mTitle = getString(R.string.title_section2);
 			break;
 		case 3:
-			mTitle = getString(R.string.title_section3);
+			mTitle = getString(R.string.title_section4);
 			break;
 		}
+		getActionBar().setTitle(mTitle);
 	}
 
 	public void restoreActionBar() {
 		ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(mTitle);
 	}
@@ -126,7 +142,7 @@ public class Control extends Activity implements
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
-			getMenuInflater().inflate(R.menu.main, menu);
+//			getMenuInflater().inflate(R.menu.main, menu);
 			restoreActionBar();
 			return true;
 		}

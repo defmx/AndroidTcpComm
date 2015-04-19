@@ -2,13 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0000C9"
+    android:background="#000000"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
-
-    <requestFocus />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,123 +14,13 @@
         android:layout_margin="@dimen/relative_layout_margin_top" >
 
         <TextView
-            android:id="@+id/textLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:text="@string/title_section1"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/text_view_left_text_size"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/textRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textLeft"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_below="@+id/textRight"
-            android:layout_centerVertical="true"
-            android:text="@string/title_section2"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/text_view_left_text_size"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textRight"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGInstVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint" 
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-                <Button
-                    android:id="@+id/btGInstVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGAvgVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-                <Button
-                    android:id="@+id/btGAvgVel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGLinMet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint"
-                    android:inputType="number"
-                    android:maxLength="5" />
-
-                <Button
-                    android:id="@+id/btGLinMet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <EditText
-                    android:id="@+id/etGDeadT"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/goalhint"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-                <Button
-                    android:id="@+id/btGDeadT"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send" />
-            </LinearLayout>
-        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>
