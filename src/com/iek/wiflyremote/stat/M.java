@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.Observer;
 
+import com.iek.wiflyremote.data.LocalDb;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -20,6 +22,7 @@ public class M {
 	private SQLiteDatabase db;
 	private Observer boardRespObserver;
 	private Socket globalSocket;
+	private LocalDb localdb;
 
 	public Socket getGlobalSocket() {
 		return globalSocket;
@@ -98,16 +101,16 @@ public class M {
 	// this.board = board;
 	// }
 	//
-	// public LocalDb getLocaldb() {
-	// return localdb;
-	// }
-	//
-	// public void setLocaldb(LocalDb localdb) {
-	// this.localdb = localdb;
-	// this.db = localdb.getWritableDatabase();
-	// localdb.onCreate(db);
-	// }
-	//
+	public LocalDb getLocaldb() {
+		return localdb;
+	}
+
+	public void setLocaldb(LocalDb localdb) {
+		this.localdb = localdb;
+		this.db = localdb.getWritableDatabase();
+		localdb.onCreate(db);
+	}
+
 	// public void loadCatalogs() {
 	// catalog.settings = new HashMap<String, String>();
 	// List<CatRow> l = getLocaldb().selectCat("settings");

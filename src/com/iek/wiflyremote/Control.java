@@ -17,9 +17,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.iek.wiflyremote.data.LocalDb;
 import com.iek.wiflyremote.stat.M;
 import com.iek.wiflyremote.ui.GoalsFragment;
 import com.iek.wiflyremote.ui.GraphicFragment;
@@ -71,19 +74,21 @@ public class Control extends Activity implements
 	};
 
 	private CharSequence mTitle;
+	private ProgressBar mprogBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		setContentView(R.layout.control);
-
+		mprogBar = (ProgressBar) findViewById(R.id.progressbar);
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+		M.m().setLocaldb(new LocalDb(this, "ldb", null, 1));
 	}
 
 	@Override
@@ -139,10 +144,6 @@ public class Control extends Activity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (!mNavigationDrawerFragment.isDrawerOpen()) {
-			// Only show items in the action bar relevant to this screen
-			// if the drawer is not showing. Otherwise, let the drawer
-			// decide what to show in the action bar.
-//			getMenuInflater().inflate(R.menu.main, menu);
 			restoreActionBar();
 			return true;
 		}
@@ -151,9 +152,6 @@ public class Control extends Activity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -167,7 +165,8 @@ public class Control extends Activity implements
 			@Override
 			public void run() {
 				try {
-					if (M.m().getGlobalSocket() == null) {
+					if (M.m().getGlobalSocket() == null
+							|| !M.m().getGlobalSocket().isConnected()) {
 						M.m().setGlobalSocket(new Socket());
 						M.m()
 								.getGlobalSocket()
@@ -178,12 +177,15 @@ public class Control extends Activity implements
 
 							@Override
 							public void run() {
+								mprogBar.setVisibility(View.GONE);
 								Toast.makeText(getApplicationContext(),
 										"Connect OK", Toast.LENGTH_SHORT)
 										.show();
 							}
 						});
 						new Thread(listenThr).start();
+					} else {
+						mprogBar.setVisibility(View.GONE);
 					}
 				} catch (Exception e) {
 					Log.i("CONNECT",

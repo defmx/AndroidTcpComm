@@ -1,5 +1,8 @@
 package com.iek.wiflyremote.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,26 +15,62 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.iek.wiflyremote.R;
+import com.iek.wiflyremote.stat.M;
 
 public class GraphicFragment extends Fragment {
 	private ImageView drawigImg;
+	private final int MARGIN = 25;
+	private final int STEP = 5;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.graph_fragment, container, false);
 		drawigImg = (ImageView) v.findViewById(R.id.imgGraphic);
-		Bitmap bitmap = Bitmap.createBitmap((int) getActivity()
-				.getWindowManager().getDefaultDisplay().getWidth(),
-				(int) getActivity().getWindowManager().getDefaultDisplay()
-						.getHeight(), Bitmap.Config.ARGB_8888);
+		int w = (int) getActivity().getWindowManager().getDefaultDisplay()
+				.getWidth();
+		int h = (int) getActivity().getWindowManager().getDefaultDisplay()
+				.getHeight();
+		Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		drawigImg.setImageBitmap(bitmap);
 
-		paint(canvas, 5, 150, 100, 210, Color.BLUE, 7);
-		paint(canvas, 5, 150, 200, 310, Color.BLACK, 7);
-		paint(canvas, 5, 150, 300, 410, Color.RED, 7);
-		paint(canvas, 5, 150, 400, 510, Color.MAGENTA, 7);
+		// List<Object[]> list = M.m().getLocaldb()
+		// .select("statistics", " type=0");
+		List<Object[]> list = new ArrayList<Object[]>();
+		list.add(new Object[] { 0, 0, 10 });
+		list.add(new Object[] { 0, 0, 20 });
+		list.add(new Object[] { 0, 0, 30 });
+		list.add(new Object[] { 0, 0, 40 });
+		list.add(new Object[] { 0, 0, 50 });
+		list.add(new Object[] { 0, 0, 10 });
+		list.add(new Object[] { 0, 0, 20 });
+		list.add(new Object[] { 0, 0, 30 });
+		list.add(new Object[] { 0, 0, 40 });
+		list.add(new Object[] { 0, 0, 50 });
+		list.add(new Object[] { 0, 0, 10 });
+		list.add(new Object[] { 0, 0, 20 });
+		list.add(new Object[] { 0, 0, 30 });
+		list.add(new Object[] { 0, 0, 40 });
+		list.add(new Object[] { 0, 0, 50 });
+		list.add(new Object[] { 0, 0, 10 });
+		list.add(new Object[] { 0, 0, 20 });
+		list.add(new Object[] { 0, 0, 30 });
+		list.add(new Object[] { 0, 0, 40 });
+		list.add(new Object[] { 0, 0, 50 });
+
+		int xlim = w - MARGIN;
+		int ylim = h - MARGIN;
+		paint(canvas, MARGIN - 10, xlim, ylim, ylim, Color.BLACK, 1);
+		paint(canvas, MARGIN, MARGIN, MARGIN, ylim + 10, Color.BLACK, 1);
+		int step = 0;
+		for (int i = 0; i < list.size(); i += 2) {
+			int d0 = Integer.parseInt(list.get(i)[2].toString());
+			int d1 = Integer.parseInt(list.get(i + 1)[2].toString());
+			step += STEP;
+			paint(canvas, MARGIN, MARGIN + step, ylim - d0, ylim - d1, Color.BLUE,
+					2);
+		}
 
 		return v;
 	}

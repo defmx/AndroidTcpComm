@@ -4,6 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,30 +17,11 @@ import com.iek.wiflyremote.stat.M;
 
 public class StatisticsFragment extends Fragment {
 	private TextView textRight;
-	private String ip;
-	private int port;
-	private Runnable statsThr = new Runnable() {
-
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(1000);
-					M.m().sendMessage(null, "P#");
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.stats_fragment, container, false);
-		ip = getActivity().getIntent().getExtras().getString("IP");
-		port = Integer.parseInt(getActivity().getIntent().getExtras()
-				.getString("PORT"));
 
 		textRight = (TextView) v.findViewById(R.id.textRight);
 
@@ -48,8 +30,7 @@ public class StatisticsFragment extends Fragment {
 			@Override
 			public void update(Observable observable, Object data) {
 				String s = (String) data;
-				if (s.startsWith("H")) {
-				} else if (s.startsWith("P#=")) {
+				if (s.startsWith("P#=")) {
 					String str = s.replace("P#=", "");
 					double v, vm, dt, d;
 					String[] parts;
@@ -59,6 +40,12 @@ public class StatisticsFragment extends Fragment {
 						vm = Double.parseDouble(parts[1]);
 						dt = Double.parseDouble(parts[2]);
 						d = Double.parseDouble(parts[3]);
+						for (int i = 0; i < parts.length; i++) {
+							ContentValues cv = new ContentValues();
+							cv.put("type", i);
+							cv.put("value", parts[i]);
+							M.m().getLocaldb().insOrUpd("statistics", cv, null);
+						}
 						textRight.setText("Velocidad=" + v + "\n Vel. Media="
 								+ vm + "\n Tiempo Muerto=" + dt
 								+ "\n Distancia=" + d);
