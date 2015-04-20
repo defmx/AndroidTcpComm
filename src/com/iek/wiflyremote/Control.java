@@ -1,6 +1,5 @@
 package com.iek.wiflyremote;
 
-import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -20,9 +20,8 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.iek.wiflyremote.data.LocalDb;
 import com.iek.wiflyremote.stat.M;
-import com.iek.wiflyremote.stat.Receiver;
+import com.iek.wiflyremote.stat.Receiver3;
 import com.iek.wiflyremote.ui.GoalsFragment;
 import com.iek.wiflyremote.ui.GraphicFragment;
 import com.iek.wiflyremote.ui.NavigationDrawerFragment;
@@ -50,17 +49,13 @@ public class Control extends Activity implements
 
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-		M.m().setLocaldb(new LocalDb(this, "ldb", null, 1));
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(System.currentTimeMillis());
-		cal.set(Calendar.HOUR_OF_DAY, 19);
-		cal.set(Calendar.MINUTE, 21);
-		Intent intent = new Intent(this, Receiver.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
-				intent, 0);
-		AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-				cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+		Intent intent = new Intent(this, Receiver3.class);
+		intent.putExtra("id", 1);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1,
+				intent, Intent.FILL_IN_DATA);
+		AlarmManager alarm = (AlarmManager) this
+				.getSystemService(Context.ALARM_SERVICE);
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 480000, pendingIntent);
 	}
 
 	@Override
@@ -80,6 +75,7 @@ public class Control extends Activity implements
 									"Connect OK", Toast.LENGTH_SHORT).show();
 						}
 					});
+					M.m().sendMessage(null, "Q");
 				} else if (data.equals("f")) {
 					runOnUiThread(new Runnable() {
 
