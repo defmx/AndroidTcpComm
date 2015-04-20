@@ -34,6 +34,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 	private String s1;
 	private String s2;
 	private String s3;
+	private CharSequence infotoshow;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -220,7 +221,21 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 						return true;
 					}
 				});
-
+		String snew = "";
+		if (infotoshow.equals("Mh")) {
+			snew = "Hora";
+		} else if (infotoshow.equals("Md")) {
+			snew = "Metros lineales";
+		} else if (infotoshow.equals("Mt")) {
+			snew = "Tiempo muerto";
+		} else if (infotoshow.equals("Mv")) {
+			snew = "Velocidad instantánea";
+		} else if (infotoshow.equals("Mu")) {
+			snew = "Velocidad promedio";
+		} else if (infotoshow.equals("Ma")) {
+			snew = "Automático";
+		}
+		infoToShowPref.setSummary(snew);
 		infoToShowPref
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -228,9 +243,21 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 					public boolean onPreferenceChange(Preference preference,
 							Object newValue) {
 						String snew = (String) newValue;
-						infoToShowPref.setSummary(((ListPreference) preference)
-								.getValue());
 						M.m().sendMessage(null, snew);
+						if (snew.equals("Mh")) {
+							snew = "Hora";
+						} else if (snew.equals("Md")) {
+							snew = "Metros lineales";
+						} else if (snew.equals("Mt")) {
+							snew = "Tiempo muerto";
+						} else if (snew.equals("Mv")) {
+							snew = "Velocidad instantánea";
+						} else if (snew.equals("Mu")) {
+							snew = "Velocidad promedio";
+						} else if (snew.equals("Ma")) {
+							snew = "Automático";
+						}
+						infoToShowPref.setSummary(snew);
 						return true;
 					}
 				});
@@ -293,8 +320,9 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 
 	private void updShifts() {
 		settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		 s1 = settings.getString("pref_time1", null);
-		 s2 = settings.getString("pref_time2", null);
-		 s3 = settings.getString("pref_time3", null);
+		s1 = settings.getString("pref_time1", null);
+		s2 = settings.getString("pref_time2", null);
+		s3 = settings.getString("pref_time3", null);
+		infotoshow = settings.getString("pref_infoToShow", null);
 	}
 }
