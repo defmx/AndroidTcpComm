@@ -27,12 +27,13 @@ public class StatisticsFragment extends Fragment {
 
 		M.m().setBoardRespObserver(new Observer() {
 
+			double v, vm, dt, d;
+
 			@Override
 			public void update(Observable observable, Object data) {
 				String s = (String) data;
 				if (s.startsWith("P#=")) {
 					String str = s.replace("P#=", "");
-					double v, vm, dt, d;
 					String[] parts;
 					try {
 						parts = str.split(",");
@@ -46,9 +47,18 @@ public class StatisticsFragment extends Fragment {
 							cv.put("value", parts[i]);
 							M.m().getLocaldb().insOrUpd("statistics", cv, null);
 						}
-						textRight.setText("Velocidad=" + v + "\n Vel. Media="
-								+ vm + "\n Tiempo Muerto=" + dt
-								+ "\n Distancia=" + d);
+						if (getActivity() != null) {
+							getActivity().runOnUiThread(new Runnable() {
+
+								@Override
+								public void run() {
+									textRight.setText("Velocidad=" + v
+											+ "\n Vel. Media=" + vm
+											+ "\n Tiempo Muerto=" + dt
+											+ "\n Distancia=" + d);
+								}
+							});
+						}
 					} catch (ArrayIndexOutOfBoundsException e) {
 						Log.e("Console", e.getMessage());
 					} catch (NumberFormatException e1) {

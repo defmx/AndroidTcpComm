@@ -4,16 +4,48 @@
     <Preference
         android:defaultValue="true"
         android:key="pref_syncclock"
-        android:summary="@string/lastsync" 
+        android:summary="@string/lastsync"
         android:title="@string/syncclock" />
+    <Preference
+        android:defaultValue="true"
+        android:key="pref_reset"
+        android:summary="@string/sendresetdescription"
+        android:title="@string/sendreset" />
 
     <ListPreference
         android:defaultValue="@string/auto"
-        android:summary="@string/auto" 
         android:dialogTitle="@string/infotoshow"
         android:entries="@array/infotoshowarray"
         android:entryValues="@array/infotoshowarrayvalues"
         android:key="pref_infoToShow"
+        android:summary="@string/auto"
         android:title="@string/infotoshow" />
+
+    <PreferenceCategory
+        android:key="shifts"
+        android:title="@string/shiftslen" >
+        <EditTextPreference
+            android:key="pref_time1"
+            android:title="@string/shiftone" />
+        <EditTextPreference
+            android:key="pref_time2"
+            android:title="@string/shifttwo" />
+        <EditTextPreference
+            android:key="pref_time3"
+            android:title="@string/shiftthree" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="shifts"
+        android:title="@string/shiftsend" >
+        <com.iek.wiflyremote.ui.TimePreference
+            android:key="pref_shift1"
+            android:title="@string/shiftone" />
+        <com.iek.wiflyremote.ui.TimePreference
+            android:key="pref_shift2"
+            android:title="@string/shifttwo" />
+        <com.iek.wiflyremote.ui.TimePreference
+            android:key="pref_shift3"
+            android:title="@string/shiftthree" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

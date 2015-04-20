@@ -1,20 +1,18 @@
 package com.iek.wiflyremote;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.util.Calendar;
+import java.util.Observable;
 import java.util.Observer;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +22,7 @@ import android.widget.Toast;
 
 import com.iek.wiflyremote.data.LocalDb;
 import com.iek.wiflyremote.stat.M;
+import com.iek.wiflyremote.stat.Receiver;
 import com.iek.wiflyremote.ui.GoalsFragment;
 import com.iek.wiflyremote.ui.GraphicFragment;
 import com.iek.wiflyremote.ui.NavigationDrawerFragment;
@@ -35,43 +34,6 @@ public class Control extends Activity implements
 	public static final int MESSAGE_DATA_RECEIVE = 0;
 
 	private NavigationDrawerFragment mNavigationDrawerFragment;
-
-	private Runnable listenThr = new Runnable() {
-
-		@Override
-		public void run() {
-			InputStream in;
-			try {
-				in = M.m().getGlobalSocket().getInputStream();
-				byte[] buff = new byte[1024];
-				int bread = 0;
-
-				while ((bread = in.read(buff)) != -1) {
-					final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
-							1024);
-					ostream.write(buff, 0, bread);
-					try {
-						final String s = ostream.toString("UTF-8").replace(
-								"\n", "");
-						Log.i("SVRRESP", s);
-						runOnUiThread(new Runnable() {
-							public void run() {
-								Observer obs = M.m().getBoardRespObserver();
-								if (obs != null) {
-									obs.update(null, s);
-								}
-
-							}
-						});
-					} catch (UnsupportedEncodingException e) {
-						Log.e("SVRRESP", e.getMessage());
-					}
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-	};
 
 	private CharSequence mTitle;
 	private ProgressBar mprogBar;
@@ -89,12 +51,50 @@ public class Control extends Activity implements
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 		M.m().setLocaldb(new LocalDb(this, "ldb", null, 1));
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+		cal.set(Calendar.HOUR_OF_DAY, 19);
+		cal.set(Calendar.MINUTE, 21);
+		Intent intent = new Intent(this, Receiver.class);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+				intent, 0);
+		AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+				cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		connect();
+		M.m().connect(new Observer() {
+
+			@Override
+			public void update(Observable observable, Object data) {
+				if (data.equals("ok")) {
+					runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							mprogBar.setVisibility(View.GONE);
+							Toast.makeText(getApplicationContext(),
+									"Connect OK", Toast.LENGTH_SHORT).show();
+						}
+					});
+				} else if (data.equals("f")) {
+					runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							Toast.makeText(getApplicationContext(),
+									"Connect Failed", Toast.LENGTH_SHORT)
+									.show();
+						}
+
+					});
+					finish();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -157,53 +157,6 @@ public class Control extends Activity implements
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void connect() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					if (M.m().getGlobalSocket() == null
-							|| !M.m().getGlobalSocket().isConnected()) {
-						M.m().setGlobalSocket(new Socket());
-						M.m()
-								.getGlobalSocket()
-								.connect(
-										new InetSocketAddress(M.m().getHost(),
-												M.m().getPort()), 3000);
-						runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								mprogBar.setVisibility(View.GONE);
-								Toast.makeText(getApplicationContext(),
-										"Connect OK", Toast.LENGTH_SHORT)
-										.show();
-							}
-						});
-						new Thread(listenThr).start();
-					} else {
-						mprogBar.setVisibility(View.GONE);
-					}
-				} catch (Exception e) {
-					Log.i("CONNECT",
-							e.getMessage() == null ? ":(" : e.getMessage());
-					runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							Toast.makeText(getApplicationContext(),
-									"Connect Failed", Toast.LENGTH_SHORT)
-									.show();
-						}
-
-					});
-					finish();
-				}
-			}
-		}).start();
 	}
 
 }

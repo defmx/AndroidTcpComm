@@ -42,40 +42,42 @@ public class GraphicFragment extends Fragment {
 		list.add(new Object[] { 0, 0, 20 });
 		list.add(new Object[] { 0, 0, 30 });
 		list.add(new Object[] { 0, 0, 40 });
-		list.add(new Object[] { 0, 0, 50 });
-		list.add(new Object[] { 0, 0, 10 });
-		list.add(new Object[] { 0, 0, 20 });
-		list.add(new Object[] { 0, 0, 30 });
-		list.add(new Object[] { 0, 0, 40 });
-		list.add(new Object[] { 0, 0, 50 });
-		list.add(new Object[] { 0, 0, 10 });
-		list.add(new Object[] { 0, 0, 20 });
-		list.add(new Object[] { 0, 0, 30 });
-		list.add(new Object[] { 0, 0, 40 });
-		list.add(new Object[] { 0, 0, 50 });
-		list.add(new Object[] { 0, 0, 10 });
-		list.add(new Object[] { 0, 0, 20 });
-		list.add(new Object[] { 0, 0, 30 });
-		list.add(new Object[] { 0, 0, 40 });
-		list.add(new Object[] { 0, 0, 50 });
+		// list.add(new Object[] { 0, 0, 50 });
+		// list.add(new Object[] { 0, 0, 10 });
+		// list.add(new Object[] { 0, 0, 20 });
+		// list.add(new Object[] { 0, 0, 30 });
+		// list.add(new Object[] { 0, 0, 40 });
+		// list.add(new Object[] { 0, 0, 50 });
+		// list.add(new Object[] { 0, 0, 10 });
+		// list.add(new Object[] { 0, 0, 20 });
+		// list.add(new Object[] { 0, 0, 30 });
+		// list.add(new Object[] { 0, 0, 40 });
+		// list.add(new Object[] { 0, 0, 50 });
+		// list.add(new Object[] { 0, 0, 10 });
+		// list.add(new Object[] { 0, 0, 20 });
+		// list.add(new Object[] { 0, 0, 30 });
+		// list.add(new Object[] { 0, 0, 40 });
+		// list.add(new Object[] { 0, 0, 50 });
 
 		int xlim = w - MARGIN;
 		int ylim = h - MARGIN;
-		paint(canvas, MARGIN - 10, xlim, ylim, ylim, Color.BLACK, 1);
+		paint(canvas, MARGIN - 10, ylim, xlim, ylim, Color.BLACK, 1);
 		paint(canvas, MARGIN, MARGIN, MARGIN, ylim + 10, Color.BLACK, 1);
 		int step = 0;
-		for (int i = 0; i < list.size(); i += 2) {
+		int xpivot = 0, ypivot = 0;
+		for (int i = 0; i < list.size(); i++) {
 			int d0 = Integer.parseInt(list.get(i)[2].toString());
-			int d1 = Integer.parseInt(list.get(i + 1)[2].toString());
+			int msp = MARGIN + step + xpivot;
+			paint(canvas, msp, ylim + ypivot, msp + 5, ylim - ypivot - d0,
+					Color.BLUE, 2);
+			ypivot = ylim - ypivot - d0;
 			step += STEP;
-			paint(canvas, MARGIN, MARGIN + step, ylim - d0, ylim - d1, Color.BLUE,
-					2);
 		}
 
 		return v;
 	}
 
-	private void paint(Canvas canvas, int x0, int x1, int y0, int y1,
+	private void paint(Canvas canvas, int x0, int y0, int x1, int y1,
 			int color, int width) {
 		Paint paint = new Paint();
 		paint.setColor(color);

@@ -4,7 +4,7 @@
     <string name="app_name">Kinex WiMote</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Opciones</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_section0">Inicio</string>
     <string name="title_section1">Estadísticas</string>
@@ -24,7 +24,13 @@
     <string name="infotoshow">Información a mostrar</string>
     <string name="auto">Automático</string>
     <string name="lastsync">Última sincronización: ninguna</string>
-    
+    <string name="shiftsend">Fin de Turno</string>
+    <string name="shiftslen">Duración de Turnos</string>
+    <string name="shiftone">Turno 1</string>
+    <string name="shifttwo">Turno 2</string>
+    <string name="shiftthree">Turno 3</string>
+    <string name="sendreset">Reestablecer</string>
+    <string name="sendresetdescription">Reestablecer acumulados del sistema</string>
 
     <string-array name="infotoshowarray">
         <item>Automático</item>

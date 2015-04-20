@@ -1889,6 +1889,13 @@ containing a value of this type.
         public static final int navigation_drawer_close=0x7f0b0012;
         public static final int navigation_drawer_open=0x7f0b0011;
         public static final int send=0x7f0b001b;
+        public static final int sendreset=0x7f0b002c;
+        public static final int sendresetdescription=0x7f0b002d;
+        public static final int shiftone=0x7f0b0029;
+        public static final int shiftsend=0x7f0b0027;
+        public static final int shiftslen=0x7f0b0028;
+        public static final int shiftthree=0x7f0b002b;
+        public static final int shifttwo=0x7f0b002a;
         public static final int syncclock=0x7f0b0023;
         public static final int title_section0=0x7f0b0015;
         public static final int title_section1=0x7f0b0016;
