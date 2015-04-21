@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
@@ -25,7 +26,7 @@ public class M {
 	// private Board board;
 	// private LocalDb localdb;
 	private SQLiteDatabase db;
-	private List<Observer> boardRespObservers;
+	private List<Observer> boardRespObservers = new ArrayList<Observer>();
 	private Socket globalSocket;
 	private LocalDb localdb;
 	private Runnable listenThr = new Runnable() {
