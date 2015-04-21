@@ -39,6 +39,7 @@
         <receiver android:name="com.iek.wiflyremote.stat.Receiver" />
         <receiver android:name="com.iek.wiflyremote.stat.Receiver1" />
         <receiver android:name="com.iek.wiflyremote.stat.Receiver2" />
+        <receiver android:name="com.iek.wiflyremote.stat.Receiver3" />
     </application>
 
 </manifest>
