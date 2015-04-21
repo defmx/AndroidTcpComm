@@ -37,7 +37,6 @@ public class StatisticsFragment extends Fragment {
 						ContentValues cv = new ContentValues();
 						cv.put("type", i);
 						cv.put("value", parts[i]);
-						M.m().getLocaldb().insOrUpd("statistics", cv, null);
 					}
 					if (getActivity() != null) {
 						getActivity().runOnUiThread(new Runnable() {
