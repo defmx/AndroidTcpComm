@@ -78,6 +78,7 @@ public class Control extends Activity implements
 							.getSystemService(Context.ALARM_SERVICE);
 					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 60000,
 							pendingIntent);
+					
 				} else if (data.equals("f")) {
 					runOnUiThread(new Runnable() {
 

@@ -3,7 +3,6 @@ package com.iek.wiflyremote.stat;
 import java.util.Observable;
 import java.util.Observer;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,7 @@ public class Receiver3 extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
-		Log.i("Receiver", "Alarm received");
+		Log.i("Receiver3", "Alarm received");
 		final Observer obs = new Observer() {
 
 			@Override
@@ -35,19 +34,7 @@ public class Receiver3 extends BroadcastReceiver {
 				try {
 					Thread.sleep(5000);
 					if (!resp.equals("C")) {
-						((Activity) context).runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								Toast.makeText(context,
-										"El servidor dejó de responder",
-										Toast.LENGTH_SHORT).show();
-							}
-						});
-
-						if (context instanceof Activity) {
-							((Activity) context).finish();
-						}
+						Log.i("Receiver3", "El servidor dejó de responder");
 					} else {
 						resp = "";
 					}
