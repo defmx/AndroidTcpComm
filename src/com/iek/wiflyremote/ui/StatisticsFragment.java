@@ -25,7 +25,7 @@ public class StatisticsFragment extends Fragment {
 
 		textRight = (TextView) v.findViewById(R.id.textRight);
 
-		M.m().setBoardRespObserver(new Observer() {
+		M.m().addBoardRespObserver(new Observer() {
 
 			double v, vm, dt, d;
 

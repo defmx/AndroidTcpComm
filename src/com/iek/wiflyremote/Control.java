@@ -55,7 +55,7 @@ public class Control extends Activity implements
 				intent, Intent.FILL_IN_DATA);
 		AlarmManager alarm = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 480000, pendingIntent);
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 60000, pendingIntent);
 	}
 
 	@Override

@@ -1,45 +1,22 @@
 package com.iek.wiflyremote.ui;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.iek.wiflyremote.R;
 import com.iek.wiflyremote.stat.M;
 
 public class GoalsFragment extends Fragment {
-	private TextView textLeft;
-	private TextView textRight;
 	private EditText etGInstVel;
 	private EditText etGAvgVel;
 	private EditText etGLinMet;
 	private EditText etGDeadT;
-	private String ip;
-	private int port;
-	private Runnable statsThr = new Runnable() {
-
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(1000);
-					M.m().sendMessage(null, "P#");
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	};
 	private EditText etGFactor;
 
 	@Override
@@ -56,22 +33,6 @@ public class GoalsFragment extends Fragment {
 		Button btGLinMet = (Button) v.findViewById(R.id.btGLinMet);
 		Button btGDeadT = (Button) v.findViewById(R.id.btGDeadT);
 		Button btGFactor = (Button) v.findViewById(R.id.btGFactor);
-
-		ip = getActivity().getIntent().getExtras().getString("IP");
-		port = Integer.parseInt(getActivity().getIntent().getExtras()
-				.getString("PORT"));
-
-		textRight = (TextView) v.findViewById(R.id.textRight);
-
-		M.m().setBoardRespObserver(new Observer() {
-
-			@Override
-			public void update(Observable observable, Object data) {
-				String s = (String) data;
-				if (s.startsWith("H")) {
-				}
-			}
-		});
 
 		btGInstVel.setOnClickListener(new OnClickListener() {
 
