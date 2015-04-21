@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
@@ -24,7 +25,7 @@ public class M {
 	// private Board board;
 	// private LocalDb localdb;
 	private SQLiteDatabase db;
-	private Observer boardRespObserver;
+	private List<Observer> boardRespObservers;
 	private Socket globalSocket;
 	private LocalDb localdb;
 	private Runnable listenThr = new Runnable() {
@@ -45,8 +46,7 @@ public class M {
 						final String s = ostream.toString("UTF-8").replace(
 								"\n", "");
 						Log.i("SVRRESP", s);
-						Observer obs = getBoardRespObserver();
-						if (obs != null) {
+						for (Observer obs : boardRespObservers) {
 							obs.update(null, s);
 						}
 					} catch (UnsupportedEncodingException e) {
@@ -152,12 +152,14 @@ public class M {
 		this.port = port;
 	}
 
-	public Observer getBoardRespObserver() {
-		return boardRespObserver;
+	public void addBoardRespObserver(Observer observer) {
+		if (observer != null) {
+			boardRespObservers.add(observer);
+		}
 	}
 
-	public void setBoardRespObserver(Observer boardRespObserver) {
-		this.boardRespObserver = boardRespObserver;
+	public void clearBoardRespObserver() {
+		this.boardRespObservers.clear();
 	}
 
 	// public Board getBoard() {
