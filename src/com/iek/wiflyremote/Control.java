@@ -49,13 +49,6 @@ public class Control extends Activity implements
 
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-		Intent intent = new Intent(this, Receiver3.class);
-		intent.putExtra("id", 1);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1,
-				intent, Intent.FILL_IN_DATA);
-		AlarmManager alarm = (AlarmManager) this
-				.getSystemService(Context.ALARM_SERVICE);
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 60000, pendingIntent);
 	}
 
 	@Override
@@ -76,6 +69,15 @@ public class Control extends Activity implements
 						}
 					});
 					M.m().sendMessage(null, "Q");
+
+					Intent intent = new Intent(Control.this, Receiver3.class);
+					intent.putExtra("id", 1);
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(
+							Control.this, 1, intent, Intent.FILL_IN_DATA);
+					AlarmManager alarm = (AlarmManager) Control.this
+							.getSystemService(Context.ALARM_SERVICE);
+					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 60000,
+							pendingIntent);
 				} else if (data.equals("f")) {
 					runOnUiThread(new Runnable() {
 

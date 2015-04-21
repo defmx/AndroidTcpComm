@@ -3,6 +3,7 @@ package com.iek.wiflyremote.stat;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,9 @@ public class Receiver3 extends BroadcastReceiver {
 						Toast.makeText(context,
 								"El servidor dejó de responder",
 								Toast.LENGTH_SHORT).show();
+						if (context instanceof Activity) {
+							((Activity) context).finish();
+						}
 					}
 				} catch (InterruptedException e) {
 
