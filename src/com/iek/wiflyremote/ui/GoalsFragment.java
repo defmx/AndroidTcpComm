@@ -75,7 +75,7 @@ public class GoalsFragment extends Fragment {
 					return;
 				}
 				if (i <= 99999) {
-					M.m().sendMessage(null, "M" + String.format("%05d", i));
+					M.m().sendMessage(null, "D" + String.format("%05d", i));
 				}
 			}
 		});

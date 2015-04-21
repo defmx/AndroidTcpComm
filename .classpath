@@ -6,5 +6,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/android-support-v7-appcompat"/>
+	<classpathentry kind="lib" path="lib/hellocharts-library-1.5.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -1,0 +1,6 @@
+
+*.properties
+
+*.apk
+
+bin/AndroidTcpComm.apk
