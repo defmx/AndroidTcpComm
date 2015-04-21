@@ -130,8 +130,9 @@ public class M {
 						observer.update(null, msg);
 					}
 					Log.i("SEND", msg);
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (Exception e) {
+					Log.e("SEND",
+							e.getMessage() == null ? ":(" : e.getMessage());
 				}
 			}
 		}).start();
@@ -156,6 +157,12 @@ public class M {
 	public void addBoardRespObserver(Observer observer) {
 		if (observer != null) {
 			boardRespObservers.add(observer);
+		}
+	}
+
+	public void delBoardRespObserver(Observer observer) {
+		if (observer != null) {
+			boardRespObservers.remove(observer);
 		}
 	}
 

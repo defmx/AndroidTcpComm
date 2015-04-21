@@ -16,8 +16,7 @@ public class Receiver3 extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		Log.i("Receiver", "Alarm received");
-
-		M.m().sendMessage(new Observer() {
+		final Observer obs = new Observer() {
 
 			@Override
 			public void update(Observable observable, Object data) {
@@ -26,7 +25,9 @@ public class Receiver3 extends BroadcastReceiver {
 					resp = s;
 				}
 			}
-		}, "C");
+		};
+		M.m().addBoardRespObserver(obs);
+		M.m().sendMessage(null, "C");
 		new Thread(new Runnable() {
 
 			@Override
@@ -34,17 +35,27 @@ public class Receiver3 extends BroadcastReceiver {
 				try {
 					Thread.sleep(5000);
 					if (!resp.equals("C")) {
-						Toast.makeText(context,
-								"El servidor dejó de responder",
-								Toast.LENGTH_SHORT).show();
+						((Activity) context).runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								Toast.makeText(context,
+										"El servidor dejó de responder",
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+
 						if (context instanceof Activity) {
 							((Activity) context).finish();
 						}
+					} else {
+						resp = "";
 					}
 				} catch (InterruptedException e) {
 
+				} finally {
+					M.m().delBoardRespObserver(obs);
 				}
-
 			}
 		}).start();
 	}
