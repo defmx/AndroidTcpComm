@@ -117,7 +117,7 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				M.m().sendMessage(null, "R");
-				Toast.makeText(getActivity(), "Ok", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Enviado", Toast.LENGTH_SHORT).show();
 				return true;
 			}
 		});

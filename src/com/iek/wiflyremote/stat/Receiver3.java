@@ -1,5 +1,6 @@
 package com.iek.wiflyremote.stat;
 
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,30 +21,38 @@ public class Receiver3 extends BroadcastReceiver {
 			@Override
 			public void update(Observable observable, Object data) {
 				String s = (String) data;
-				if (s.equals("C")) {
-					resp = s;
+				if (s.contains("C")) {
+					resp = "C";
 				}
 			}
 		};
-		M.m().addBoardRespObserver(obs);
+		
 		M.m().sendMessage(null, "C");
+		M.m().addBoardRespObserver(obs);
 		new Thread(new Runnable() {
-
+			
 			@Override
 			public void run() {
 				try {
 					Thread.sleep(5000);
 					if (!resp.equals("C")) {
-						Log.i("Receiver3", "El servidor dejÃ³ de responder");
+						Log.i("Receiver3", "El servidor dejó de responder");
+						
+						this.finalize();
 					} else {
 						resp = "";
 					}
 				} catch (InterruptedException e) {
 
+				} catch (Throwable e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} finally {
 					M.m().delBoardRespObserver(obs);
 				}
 			}
 		}).start();
+		
 	}
+	
 }

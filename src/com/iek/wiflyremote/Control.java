@@ -65,10 +65,10 @@ public class Control extends Activity implements
 						public void run() {
 							mprogBar.setVisibility(View.GONE);
 							Toast.makeText(getApplicationContext(),
-									"Connect OK", Toast.LENGTH_SHORT).show();
+									"Conectado", Toast.LENGTH_SHORT).show();
 						}
 					});
-					M.m().sendMessage(null, "Q");
+					
 
 					Intent intent = new Intent(Control.this, Receiver3.class);
 					intent.putExtra("id", 1);
@@ -76,16 +76,16 @@ public class Control extends Activity implements
 							Control.this, 1, intent, Intent.FILL_IN_DATA);
 					AlarmManager alarm = (AlarmManager) Control.this
 							.getSystemService(Context.ALARM_SERVICE);
-					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 60000,
-							pendingIntent);
-					
+					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 120000,
+							pendingIntent);					
+					M.m().sendMessage(null, "Q");
 				} else if (data.equals("f")) {
 					runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
 							Toast.makeText(getApplicationContext(),
-									"Connect Failed", Toast.LENGTH_SHORT)
+									"Conexión no establecida", Toast.LENGTH_SHORT)
 									.show();
 						}
 
@@ -157,5 +157,7 @@ public class Control extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	
 
 }

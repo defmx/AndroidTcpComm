@@ -193,7 +193,7 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:paddingStart="50dp"
-                android:text="@string/factor"
+                android:text="@string/DR"
                 android:textColor="#ffffff"
                 android:textSize="30sp" />
 

@@ -113,8 +113,9 @@ public class M {
 	}
 
 	public void sendMessage(final Observer observer, final String msg) {
+			
 		new Thread(new Runnable() {
-
+            
 			@Override
 			public void run() {
 

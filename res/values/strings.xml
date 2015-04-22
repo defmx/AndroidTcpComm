@@ -48,4 +48,5 @@
         <item>Mt</item>
         <item>Mh</item>
     </string-array>
+        <string name="DR">Diamétro de Rueda</string>
 </resources>
