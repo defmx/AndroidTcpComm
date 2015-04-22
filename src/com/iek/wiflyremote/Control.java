@@ -52,8 +52,8 @@ public class Control extends Activity implements
 	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();
+	protected void onDestroy() {
+		super.onDestroy();
 		M.m().disconnect();
 	}
 	
