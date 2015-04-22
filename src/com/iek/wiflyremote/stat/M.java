@@ -29,36 +29,7 @@ public class M {
 	private List<Observer> boardRespObservers = new ArrayList<Observer>();
 	private Socket globalSocket;
 	private LocalDb localdb;
-	private Runnable listenThr = new Runnable() {
-
-		@Override
-		public void run() {
-			InputStream in;
-			try {
-				in = getGlobalSocket().getInputStream();
-				byte[] buff = new byte[1024];
-				int bread = 0;
-
-				while ((bread = in.read(buff)) != -1) {
-					final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
-							1024);
-					ostream.write(buff, 0, bread);
-					try {
-						final String s = ostream.toString("UTF-8").replace(
-								"\n", "");
-						Log.i("SVRRESP", s);
-						for (Observer obs : boardRespObservers) {
-							obs.update(null, s);
-						}
-					} catch (UnsupportedEncodingException e) {
-						Log.e("SVRRESP", e.getMessage());
-					}
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-	};
+	private Thread listenThr;
 
 	public Socket getGlobalSocket() {
 		return globalSocket;
@@ -86,8 +57,6 @@ public class M {
 			@Override
 			public void run() {
 				try {
-					if (M.m().getGlobalSocket() == null
-							|| !M.m().getGlobalSocket().isConnected()) {
 						M.m().setGlobalSocket(new Socket());
 						getGlobalSocket().connect(
 								new InetSocketAddress(M.m().getHost(), M.m()
@@ -95,12 +64,37 @@ public class M {
 						if (observer != null) {
 							observer.update(null, "ok");
 						}
-						new Thread(listenThr).start();
-					} else {
-						if (observer != null) {
-							observer.update(null, "ok");
-						}
-					}
+						listenThr = new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								InputStream in;
+								try {
+									in = getGlobalSocket().getInputStream();
+									byte[] buff = new byte[1024];
+									int bread = 0;
+
+									while ((bread = in.read(buff)) != -1) {
+										final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
+												1024);
+										ostream.write(buff, 0, bread);
+										try {
+											final String s = ostream.toString(
+													"UTF-8").replace("\n", "");
+											Log.i("SVRRESP", s);
+											for (Observer obs : boardRespObservers) {
+												obs.update(null, s);
+											}
+										} catch (UnsupportedEncodingException e) {
+											Log.e("SVRRESP", e.getMessage());
+										}
+									}
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+							}
+						});
+						listenThr.start();
 				} catch (Exception e) {
 					Log.i("CONNECT",
 							e.getMessage() == null ? ":(" : e.getMessage());
@@ -112,10 +106,23 @@ public class M {
 		}).start();
 	}
 
+	public void disconnect() {
+		if (listenThr.isAlive()) {
+			try {
+				globalSocket.shutdownInput();
+				globalSocket.shutdownOutput();
+				listenThr.join();
+				globalSocket.close();
+			} catch (Exception e) {
+				Log.e("M DISCONNECT", e.getMessage());
+			}
+		}
+	}
+
 	public void sendMessage(final Observer observer, final String msg) {
-			
+
 		new Thread(new Runnable() {
-            
+
 			@Override
 			public void run() {
 

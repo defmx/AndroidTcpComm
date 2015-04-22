@@ -50,7 +50,13 @@ public class Control extends Activity implements
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 	}
-
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		M.m().disconnect();
+	}
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -85,7 +91,7 @@ public class Control extends Activity implements
 						@Override
 						public void run() {
 							Toast.makeText(getApplicationContext(),
-									"Conexión no establecida", Toast.LENGTH_SHORT)
+									"ConexiÃ³n no establecida", Toast.LENGTH_SHORT)
 									.show();
 						}
 
@@ -96,6 +102,8 @@ public class Control extends Activity implements
 		});
 	}
 
+	
+	
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		Fragment f = null;
