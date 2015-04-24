@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,12 +55,25 @@ public class Control extends Activity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		M.m().sendMessage(null, "S");
+		try {
+			Thread.sleep(150);
+		} catch (InterruptedException e) {
+			Log.e("Control.onPause", e.getMessage());
+		}
 		M.m().disconnect();
+		M.m().setAppIsActive(false);
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
+		M.m().setAppIsActive(true);
 		M.m().connect(new Observer() {
 
 			@Override
@@ -74,17 +88,15 @@ public class Control extends Activity implements
 									"Conectado", Toast.LENGTH_SHORT).show();
 						}
 					});
-					
-
+					M.m().sendMessage(null, "Q");
 					Intent intent = new Intent(Control.this, Receiver3.class);
 					intent.putExtra("id", 1);
 					PendingIntent pendingIntent = PendingIntent.getBroadcast(
 							Control.this, 1, intent, Intent.FILL_IN_DATA);
 					AlarmManager alarm = (AlarmManager) Control.this
 							.getSystemService(Context.ALARM_SERVICE);
-					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 120000,
-							pendingIntent);					
-					M.m().sendMessage(null, "Q");
+					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 90000,
+							pendingIntent);		
 				} else if (data.equals("f")) {
 					runOnUiThread(new Runnable() {
 

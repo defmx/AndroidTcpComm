@@ -30,6 +30,7 @@ public class M {
 	private Socket globalSocket;
 	private LocalDb localdb;
 	private Thread listenThr;
+	private boolean appIsActive;
 
 	public Socket getGlobalSocket() {
 		return globalSocket;
@@ -57,44 +58,44 @@ public class M {
 			@Override
 			public void run() {
 				try {
-						M.m().setGlobalSocket(new Socket());
-						getGlobalSocket().connect(
-								new InetSocketAddress(M.m().getHost(), M.m()
-										.getPort()), 3000);
-						if (observer != null) {
-							observer.update(null, "ok");
-						}
-						listenThr = new Thread(new Runnable() {
+					M.m().setGlobalSocket(new Socket());
+					getGlobalSocket().connect(
+							new InetSocketAddress(M.m().getHost(), M.m()
+									.getPort()), 3000);
+					if (observer != null) {
+						observer.update(null, "ok");
+					}
+					listenThr = new Thread(new Runnable() {
 
-							@Override
-							public void run() {
-								InputStream in;
-								try {
-									in = getGlobalSocket().getInputStream();
-									byte[] buff = new byte[1024];
-									int bread = 0;
+						@Override
+						public void run() {
+							InputStream in;
+							try {
+								in = getGlobalSocket().getInputStream();
+								byte[] buff = new byte[1024];
+								int bread = 0;
 
-									while ((bread = in.read(buff)) != -1) {
-										final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
-												1024);
-										ostream.write(buff, 0, bread);
-										try {
-											final String s = ostream.toString(
-													"UTF-8").replace("\n", "");
-											Log.i("SVRRESP", s);
-											for (Observer obs : boardRespObservers) {
-												obs.update(null, s);
-											}
-										} catch (UnsupportedEncodingException e) {
-											Log.e("SVRRESP", e.getMessage());
+								while ((bread = in.read(buff)) != -1) {
+									final ByteArrayOutputStream ostream = new ByteArrayOutputStream(
+											1024);
+									ostream.write(buff, 0, bread);
+									try {
+										final String s = ostream.toString(
+												"UTF-8").replace("\n", "");
+										Log.i("SVRRESP", s);
+										for (Observer obs : boardRespObservers) {
+											obs.update(null, s);
 										}
+									} catch (UnsupportedEncodingException e) {
+										Log.e("SVRRESP", e.getMessage());
 									}
-								} catch (IOException e1) {
-									e1.printStackTrace();
 								}
+							} catch (IOException e1) {
+								e1.printStackTrace();
 							}
-						});
-						listenThr.start();
+						}
+					});
+					listenThr.start();
 				} catch (Exception e) {
 					Log.i("CONNECT",
 							e.getMessage() == null ? ":(" : e.getMessage());
@@ -196,12 +197,12 @@ public class M {
 		localdb.onCreate(db);
 	}
 
-	// public void loadCatalogs() {
-	// catalog.settings = new HashMap<String, String>();
-	// List<CatRow> l = getLocaldb().selectCat("settings");
-	// for (CatRow c : l) {
-	// catalog.settings.put(c.getName(), c.getValue());
-	// }
-	//
-	// }
+	public boolean appIsActive() {
+		Log.i("Receiver3", "App is " + (appIsActive ? "" : "not ") + "active");
+		return appIsActive;
+	}
+
+	public void setAppIsActive(boolean appIsActive) {
+		this.appIsActive = appIsActive;
+	}
 }

@@ -117,7 +117,8 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				M.m().sendMessage(null, "R");
-				Toast.makeText(getActivity(), "Enviado", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Enviado", Toast.LENGTH_SHORT)
+						.show();
 				return true;
 			}
 		});
@@ -261,58 +262,64 @@ public class PreferenceFragment extends android.preference.PreferenceFragment {
 						return true;
 					}
 				});
-		lenPref1.setSummary(s1 + " horas");
+		lenPref1.setSummary(s1 == null ? "Sin establecer" : s1 + " horas");
 		lenPref1.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 				int len = Integer.parseInt(newValue.toString());
-				if (len < 5 || len > 12) {
+				if (len < 1 || len > 12) {
 					Toast.makeText(
 							getActivity(),
-							"La duración del turno debe estar entre 5 y 12 horas",
+							"La duración del turno debe estar entre 1 y 12 horas",
 							Toast.LENGTH_SHORT).show();
 					return false;
+				} else {
+					M.m().sendMessage(null, "H" + String.format("%02d", len));
+					preference.setSummary(len + " horas");
+					return true;
 				}
-				preference.setSummary(len + " horas");
-				return true;
 			}
 		});
-		lenPref2.setSummary(s2 + " horas");
+		lenPref2.setSummary(s2 == null ? "Sin establecer" : s2 + " horas");
 		lenPref2.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 				int len = Integer.parseInt(newValue.toString());
-				if (len < 5 || len > 12) {
+				if (len < 1 || len > 12) {
 					Toast.makeText(
 							getActivity(),
-							"La duración del turno debe estar entre 5 y 12 horas",
+							"La duración del turno debe estar entre 1 y 12 horas",
 							Toast.LENGTH_SHORT).show();
 					return false;
+				} else {
+					M.m().sendMessage(null, "H" + String.format("%02d", len));
+					preference.setSummary(len + " horas");
+					return true;
 				}
-				preference.setSummary(len + " horas");
-				return true;
 			}
 		});
-		lenPref3.setSummary(s3 + " horas");
+		lenPref3.setSummary(s3 == null ? "Sin establecer" : s3 + " horas");
 		lenPref3.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			@Override
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 				int len = Integer.parseInt(newValue.toString());
-				if (len < 5 || len > 12) {
+				if (len < 1 || len > 12) {
 					Toast.makeText(
 							getActivity(),
-							"La duración del turno debe estar entre 5 y 12 horas",
+							"La duración del turno debe estar entre 1 y 12 horas",
 							Toast.LENGTH_SHORT).show();
 					return false;
+				} else {
+					M.m().sendMessage(null, "H" + String.format("%02d", len));
+					preference.setSummary(len + " horas");
+					return true;
 				}
-				preference.setSummary(len + " horas");
-				return true;
 			}
 		});
 		return v;

@@ -26,54 +26,37 @@ public class GraphicFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.graph_fragment, container, false);
-		drawigImg = (ImageView) v.findViewById(R.id.imgGraphic);
-		int w = (int) getActivity().getWindowManager().getDefaultDisplay()
-				.getWidth();
-		int h = (int) getActivity().getWindowManager().getDefaultDisplay()
-				.getHeight();
-		Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
-		drawigImg.setImageBitmap(bitmap);
-
-		// List<Object[]> list = M.m().getLocaldb()
-		// .select("statistics", " type=0");
-		List<Object[]> list = new ArrayList<Object[]>();
-		list.add(new Object[] { 0, 0, 10 });
-		list.add(new Object[] { 0, 0, 20 });
-		list.add(new Object[] { 0, 0, 30 });
-		list.add(new Object[] { 0, 0, 40 });
-		// list.add(new Object[] { 0, 0, 50 });
-		// list.add(new Object[] { 0, 0, 10 });
-		// list.add(new Object[] { 0, 0, 20 });
-		// list.add(new Object[] { 0, 0, 30 });
-		// list.add(new Object[] { 0, 0, 40 });
-		// list.add(new Object[] { 0, 0, 50 });
-		// list.add(new Object[] { 0, 0, 10 });
-		// list.add(new Object[] { 0, 0, 20 });
-		// list.add(new Object[] { 0, 0, 30 });
-		// list.add(new Object[] { 0, 0, 40 });
-		// list.add(new Object[] { 0, 0, 50 });
-		// list.add(new Object[] { 0, 0, 10 });
-		// list.add(new Object[] { 0, 0, 20 });
-		// list.add(new Object[] { 0, 0, 30 });
-		// list.add(new Object[] { 0, 0, 40 });
-		// list.add(new Object[] { 0, 0, 50 });
-
-		int xlim = w - MARGIN;
-		int ylim = h - MARGIN;
-		paint(canvas, MARGIN - 10, ylim, xlim, ylim, Color.BLACK, 1);
-		paint(canvas, MARGIN, MARGIN, MARGIN, ylim + 10, Color.BLACK, 1);
-		int step = 0;
-		int xpivot = 0, ypivot = 0;
-		for (int i = 0; i < list.size(); i++) {
-			int d0 = Integer.parseInt(list.get(i)[2].toString());
-			int msp = MARGIN + step + xpivot;
-			paint(canvas, msp, ylim + ypivot, msp + 5, ylim - ypivot - d0,
-					Color.BLUE, 2);
-			ypivot = ylim - ypivot - d0;
-			step += STEP;
-		}
-
+//		drawigImg = (ImageView) v.findViewById(R.id.imgGraphic);
+		/*
+		 * int w = (int) getActivity().getWindowManager().getDefaultDisplay()
+		 * .getWidth(); int h = (int)
+		 * getActivity().getWindowManager().getDefaultDisplay() .getHeight();
+		 * Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		 * Canvas canvas = new Canvas(bitmap); drawigImg.setImageBitmap(bitmap);
+		 * 
+		 * // List<Object[]> list = M.m().getLocaldb() // .select("statistics",
+		 * " type=0"); List<Object[]> list = new ArrayList<Object[]>();
+		 * list.add(new Object[] { 0, 0, 10 }); list.add(new Object[] { 0, 0, 20
+		 * }); list.add(new Object[] { 0, 0, 30 }); list.add(new Object[] { 0,
+		 * 0, 40 }); // list.add(new Object[] { 0, 0, 50 }); // list.add(new
+		 * Object[] { 0, 0, 10 }); // list.add(new Object[] { 0, 0, 20 }); //
+		 * list.add(new Object[] { 0, 0, 30 }); // list.add(new Object[] { 0, 0,
+		 * 40 }); // list.add(new Object[] { 0, 0, 50 }); // list.add(new
+		 * Object[] { 0, 0, 10 }); // list.add(new Object[] { 0, 0, 20 }); //
+		 * list.add(new Object[] { 0, 0, 30 }); // list.add(new Object[] { 0, 0,
+		 * 40 }); // list.add(new Object[] { 0, 0, 50 }); // list.add(new
+		 * Object[] { 0, 0, 10 }); // list.add(new Object[] { 0, 0, 20 }); //
+		 * list.add(new Object[] { 0, 0, 30 }); // list.add(new Object[] { 0, 0,
+		 * 40 }); // list.add(new Object[] { 0, 0, 50 });
+		 * 
+		 * int xlim = w - MARGIN; int ylim = h - MARGIN; paint(canvas, MARGIN -
+		 * 10, ylim, xlim, ylim, Color.BLACK, 1); paint(canvas, MARGIN, MARGIN,
+		 * MARGIN, ylim + 10, Color.BLACK, 1); int step = 0; int xpivot = 0,
+		 * ypivot = 0; for (int i = 0; i < list.size(); i++) { int d0 =
+		 * Integer.parseInt(list.get(i)[2].toString()); int msp = MARGIN + step
+		 * + xpivot; paint(canvas, msp, ylim + ypivot, msp + 5, ylim - ypivot -
+		 * d0, Color.BLUE, 2); ypivot = ylim - ypivot - d0; step += STEP; }
+		 */
 		return v;
 	}
 

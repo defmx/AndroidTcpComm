@@ -1716,7 +1716,6 @@ containing a value of this type.
         public static final int ifRoom=0x7f0a0016;
         public static final int image=0x7f0a0023;
         public static final int imageSplash=0x7f0a0053;
-        public static final int imgGraphic=0x7f0a004d;
         public static final int listMode=0x7f0a000a;
         public static final int list_item=0x7f0a0025;
         public static final int middle=0x7f0a001d;
@@ -1747,6 +1746,7 @@ containing a value of this type.
         public static final int submit_area=0x7f0a003c;
         public static final int tabMode=0x7f0a000c;
         public static final int textRight=0x7f0a004e;
+        public static final int textView1=0x7f0a004d;
         public static final int title=0x7f0a0027;
         public static final int up=0x7f0a0001;
         public static final int useLogo=0x7f0a0013;
@@ -1882,6 +1882,7 @@ containing a value of this type.
         public static final int deadtime=0x7f0b0021;
         public static final int factor=0x7f0b0022;
         public static final int goalhint=0x7f0b001c;
+        public static final int graphmessage=0x7f0b002f;
         public static final int hello_world=0x7f0b0014;
         public static final int infotoshow=0x7f0b0024;
         public static final int instantspeed=0x7f0b001e;
