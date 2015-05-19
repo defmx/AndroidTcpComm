@@ -108,7 +108,7 @@ public class M {
 	}
 
 	public void disconnect() {
-		if (listenThr.isAlive()) {
+		if (listenThr != null && listenThr.isAlive()) {
 			try {
 				globalSocket.shutdownInput();
 				globalSocket.shutdownOutput();

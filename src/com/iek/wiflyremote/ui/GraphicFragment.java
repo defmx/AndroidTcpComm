@@ -2,6 +2,7 @@ package com.iek.wiflyremote.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
@@ -20,44 +21,94 @@ import com.iek.wiflyremote.stat.M;
 public class GraphicFragment extends Fragment {
 	private ImageView drawigImg;
 	private final int MARGIN = 25;
-	private final int STEP = 5;
+	private Canvas canvas;
+	private int w;
+	private int h;
+	private View v;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.graph_fragment, container, false);
-//		drawigImg = (ImageView) v.findViewById(R.id.imgGraphic);
-		/*
-		 * int w = (int) getActivity().getWindowManager().getDefaultDisplay()
-		 * .getWidth(); int h = (int)
-		 * getActivity().getWindowManager().getDefaultDisplay() .getHeight();
-		 * Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-		 * Canvas canvas = new Canvas(bitmap); drawigImg.setImageBitmap(bitmap);
-		 * 
-		 * // List<Object[]> list = M.m().getLocaldb() // .select("statistics",
-		 * " type=0"); List<Object[]> list = new ArrayList<Object[]>();
-		 * list.add(new Object[] { 0, 0, 10 }); list.add(new Object[] { 0, 0, 20
-		 * }); list.add(new Object[] { 0, 0, 30 }); list.add(new Object[] { 0,
-		 * 0, 40 }); // list.add(new Object[] { 0, 0, 50 }); // list.add(new
-		 * Object[] { 0, 0, 10 }); // list.add(new Object[] { 0, 0, 20 }); //
-		 * list.add(new Object[] { 0, 0, 30 }); // list.add(new Object[] { 0, 0,
-		 * 40 }); // list.add(new Object[] { 0, 0, 50 }); // list.add(new
-		 * Object[] { 0, 0, 10 }); // list.add(new Object[] { 0, 0, 20 }); //
-		 * list.add(new Object[] { 0, 0, 30 }); // list.add(new Object[] { 0, 0,
-		 * 40 }); // list.add(new Object[] { 0, 0, 50 }); // list.add(new
-		 * Object[] { 0, 0, 10 }); // list.add(new Object[] { 0, 0, 20 }); //
-		 * list.add(new Object[] { 0, 0, 30 }); // list.add(new Object[] { 0, 0,
-		 * 40 }); // list.add(new Object[] { 0, 0, 50 });
-		 * 
-		 * int xlim = w - MARGIN; int ylim = h - MARGIN; paint(canvas, MARGIN -
-		 * 10, ylim, xlim, ylim, Color.BLACK, 1); paint(canvas, MARGIN, MARGIN,
-		 * MARGIN, ylim + 10, Color.BLACK, 1); int step = 0; int xpivot = 0,
-		 * ypivot = 0; for (int i = 0; i < list.size(); i++) { int d0 =
-		 * Integer.parseInt(list.get(i)[2].toString()); int msp = MARGIN + step
-		 * + xpivot; paint(canvas, msp, ylim + ypivot, msp + 5, ylim - ypivot -
-		 * d0, Color.BLUE, 2); ypivot = ylim - ypivot - d0; step += STEP; }
-		 */
+		v = inflater.inflate(R.layout.graph_fragment, container, false);
+		drawigImg = (ImageView) v.findViewById(R.id.imgGraphic);
+
+		w = (int) getActivity().getWindowManager().getDefaultDisplay()
+				.getWidth();
+		h = (int) getActivity().getWindowManager().getDefaultDisplay()
+				.getHeight();
+		Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+		canvas = new Canvas(bitmap);
+		drawigImg.setImageBitmap(bitmap);
+
+		// List<Object[]> list = M.m().getLocaldb().select("statistics",
+		// " type=0");
+
 		return v;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while (true) {
+					if (getActivity() == null) {
+						return;
+					}
+					final List<Object[]> list = getValues();
+					final int xlim = w - MARGIN;
+					final int ylim = h - MARGIN;
+					getActivity().runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							paint(canvas, MARGIN - 10, ylim, xlim, ylim,
+									Color.BLACK, 1);
+							paint(canvas, MARGIN, MARGIN, MARGIN, ylim + 10,
+									Color.BLACK, 1);
+							for (int i = 0; i < list.size(); i++) {
+								if (i + 1 < list.size()) {
+									int x0 = i;
+									int y0 = Integer.parseInt(list.get(i)[1]
+											.toString());
+									int x1 = i + 1;
+									int y1 = Integer.parseInt(list.get(i + 1)[1]
+											.toString());
+									paint(canvas, MARGIN + x0, ylim - y0,
+											MARGIN + x1, ylim - y1, Color.BLUE,
+											1);
+								}
+							}
+							v.invalidate();
+						}
+					});
+					try {
+						Thread.sleep(300);
+						getActivity().runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								canvas.drawColor(Color.WHITE);
+							}
+						});
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
+	}
+
+	private List<Object[]> getValues() {
+		List<Object[]> list = new ArrayList<Object[]>();
+		Random r = new Random();
+		for (int i = 0; i < 1000; i++) {
+			list.add(new Object[] { 0, r.nextInt(400) });
+		}
+
+		return list;
 	}
 
 	private void paint(Canvas canvas, int x0, int y0, int x1, int y1,
