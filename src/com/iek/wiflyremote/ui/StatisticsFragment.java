@@ -17,7 +17,8 @@ import com.iek.wiflyremote.stat.M;
 
 public class StatisticsFragment extends Fragment {
 	private TextView textRight;
-	private Observer observer=new Observer() {
+	private long sttime = 0;
+	private Observer observer = new Observer() {
 
 		double v, vm, dt, d;
 
@@ -25,6 +26,9 @@ public class StatisticsFragment extends Fragment {
 		public void update(Observable observable, Object data) {
 			String s = (String) data;
 			if (s.startsWith("P#=")) {
+				if (sttime == 0) {
+					sttime = System.currentTimeMillis();
+				}
 				String str = s.replace("P#=", "");
 				String[] parts;
 				try {
@@ -33,20 +37,28 @@ public class StatisticsFragment extends Fragment {
 					vm = Double.parseDouble(parts[1]);
 					dt = Double.parseDouble(parts[2]);
 					d = Double.parseDouble(parts[3]);
-					for (int i = 0; i < parts.length; i++) {
+					long t = System.currentTimeMillis();
+					if (t - sttime >= 1000 * 12 * 1) {
+						sttime = 0;
 						ContentValues cv = new ContentValues();
-						cv.put("type", i);
-						cv.put("value", parts[i]);
+						cv.put("utime", t);
+						cv.put("v", v);
+						cv.put("vm", vm);
+						cv.put("dt", dt);
+						cv.put("d", d);
+						M.m().getLocaldb().insOrUpd("statistics", cv, "");
 					}
 					if (getActivity() != null) {
 						getActivity().runOnUiThread(new Runnable() {
 
 							@Override
 							public void run() {
-								textRight.setText("\t Velocidad = " + v + " m/min\n\n"
-										+ "\t Vel. Media = " + vm + " m/min\n\n"
-										+ "\t Tiempo Muerto = " + dt + " min\n\n"
-										+ "\t Distancia = " + d + " m");
+								textRight.setText("\t Velocidad = " + v
+										+ " m/min\n\n" + "\t Vel. Media = "
+										+ vm + " m/min\n\n"
+										+ "\t Tiempo Muerto = " + dt
+										+ " min\n\n" + "\t Distancia = " + d
+										+ " m");
 							}
 						});
 					}
@@ -70,7 +82,7 @@ public class StatisticsFragment extends Fragment {
 
 		return v;
 	}
-	
+
 	@Override
 	public void onDetach() {
 		super.onDetach();

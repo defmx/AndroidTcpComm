@@ -21,6 +21,7 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.iek.wiflyremote.data.LocalDb;
 import com.iek.wiflyremote.stat.M;
 import com.iek.wiflyremote.stat.Receiver3;
 import com.iek.wiflyremote.ui.GoalsFragment;
@@ -50,13 +51,14 @@ public class Control extends Activity implements
 
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+		M.m().setLocaldb(new LocalDb(this, "iekdb", null, 1));
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -69,7 +71,7 @@ public class Control extends Activity implements
 		M.m().disconnect();
 		M.m().setAppIsActive(false);
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -98,26 +100,24 @@ public class Control extends Activity implements
 					AlarmManager alarm = (AlarmManager) Control.this
 							.getSystemService(Context.ALARM_SERVICE);
 					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 90000,
-							pendingIntent);		
+							pendingIntent);
 				} else if (data.equals("f")) {
 					runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
 							Toast.makeText(getApplicationContext(),
-									"Conexión no establecida", Toast.LENGTH_SHORT)
-									.show();
+									"Conexión no establecida",
+									Toast.LENGTH_SHORT).show();
 						}
 
 					});
-//					finish();
+					// finish();
 				}
 			}
 		});
 	}
 
-	
-	
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		Fragment f = null;
@@ -179,7 +179,5 @@ public class Control extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
 
 }
