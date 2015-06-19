@@ -74,6 +74,7 @@ public class Control extends Activity implements
 	protected void onStart() {
 		super.onStart();
 		M.m().setAppIsActive(true);
+		mprogBar.setVisibility(View.GONE);
 		M.m().connect(new Observer() {
 
 			@Override
@@ -86,6 +87,7 @@ public class Control extends Activity implements
 							mprogBar.setVisibility(View.GONE);
 							Toast.makeText(getApplicationContext(),
 									"Conectado", Toast.LENGTH_SHORT).show();
+							mprogBar.setVisibility(View.GONE);
 						}
 					});
 					M.m().sendMessage(null, "Q");
@@ -103,12 +105,12 @@ public class Control extends Activity implements
 						@Override
 						public void run() {
 							Toast.makeText(getApplicationContext(),
-									"ConexiÃ³n no establecida", Toast.LENGTH_SHORT)
+									"Conexión no establecida", Toast.LENGTH_SHORT)
 									.show();
 						}
 
 					});
-					finish();
+//					finish();
 				}
 			}
 		});
