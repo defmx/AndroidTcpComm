@@ -30,7 +30,7 @@ public class LocalDb extends SQLiteOpenHelper {
 		String q3 = "CREATE TABLE IF NOT EXISTS hosts(_id integer primary key autoincrement,name text unique,value text)";
 		String q2 = "CREATE TABLE IF NOT EXISTS cstopreasons(_id integer primary key autoincrement,name text unique,value text)";
 		String q4 = "CREATE TABLE IF NOT EXISTS statistics(_id integer primary key autoincrement,utime integer,v real,vm real,dt real,d real)";
-		String q5 = "CREATE TABLE IF NOT EXISTS stops(_is integer primary key,start_time text,end_time text,reason_id,length integer)";
+		String q5 = "CREATE TABLE IF NOT EXISTS stops(_id integer primary key,uid text,start_time text,end_time text,reason_id,length integer)";
 		try {
 			if (db.isOpen()) {
 				db.execSQL(q1);

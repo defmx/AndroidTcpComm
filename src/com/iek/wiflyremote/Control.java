@@ -141,10 +141,10 @@ public class Control extends Activity implements
 			f = new GraphicFragment();
 			break;
 		case 3:
-			f = new PreferenceFragment();
+			f = new ReportsFragment();
 			break;
 		case 4:
-			f = new ReportsFragment();
+			f = new PreferenceFragment();
 			break;
 		default:
 			return;

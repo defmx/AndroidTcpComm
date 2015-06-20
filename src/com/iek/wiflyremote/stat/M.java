@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -81,6 +82,11 @@ public class M {
 									try {
 										final String s = ostream.toString(
 												"UTF-8").replace("\n", "");
+										if (s.startsWith("¡")) {
+											ContentValues cv=new ContentValues();
+											cv.put("start_time", System.currentTimeMillis());
+											getLocaldb().insOrUpd("stops", cv, null);
+										}
 										Log.i("SVRRESP", s);
 										for (Observer obs : boardRespObservers) {
 											obs.update(null, s);
