@@ -29,13 +29,15 @@ public class LocalDb extends SQLiteOpenHelper {
 		String q1 = "CREATE TABLE IF NOT EXISTS settings(_id integer primary key autoincrement,name text unique,value text)";
 		String q3 = "CREATE TABLE IF NOT EXISTS hosts(_id integer primary key autoincrement,name text unique,value text)";
 		String q2 = "CREATE TABLE IF NOT EXISTS cstopreasons(_id integer primary key autoincrement,name text unique,value text)";
-		String q4 = "CREATE TABLE IF NOT EXISTS statistics(_id integer primary key autoincrement,type integer,value real)";
+		String q4 = "CREATE TABLE IF NOT EXISTS statistics(_id integer primary key autoincrement,utime integer,v real,vm real,dt real,d real)";
+		String q5 = "CREATE TABLE IF NOT EXISTS stops(_is integer primary key,start_time text,end_time text,reason_id,length integer)";
 		try {
 			if (db.isOpen()) {
 				db.execSQL(q1);
 				db.execSQL(q2);
 				db.execSQL(q3);
 				db.execSQL(q4);
+				db.execSQL(q5);
 			}
 		} catch (SQLiteException e) {
 			Log.e("LocalDb", e.getMessage());
@@ -75,16 +77,19 @@ public class LocalDb extends SQLiteOpenHelper {
 		} finally {
 			db.endTransaction();
 		}
+		Log.i("LocalDb", count + " rows affected");
 		return count;
 	}
 
-	public List<Object[]> select(String table, String where) {
+	public List<Object[]> select(String table, String where, int limit) {
 		List<Object[]> r = new ArrayList<Object[]>();
 
 		String q = "SELECT * FROM " + table;
 		if (where != null && where != "") {
 			q += " WHERE" + where;
 		}
+		q += "%s";
+		q = String.format(q, limit > 0 ? " limit " + limit : "");
 		try {
 			Cursor c = db.rawQuery(q, null);
 			if (c.moveToFirst()) {

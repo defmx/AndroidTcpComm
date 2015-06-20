@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mnuvars"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+    
+    <RadioButton
+        android:id="@+id/mnuvm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="Velocidad media"
+        android:textColor="#ffffff" />
+
+    <RadioButton
+        android:id="@+id/mnudt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Tiempo muerto"
+        android:textColor="#ffffff" />
+
+    <RadioButton
+        android:id="@+id/mnud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Distancia"
+        android:textColor="#ffffff" />
+
+    <RadioButton
+        android:id="@+id/mnuv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Velocidad"
+        android:textColor="#ffffff" />
+
+</RadioGroup>

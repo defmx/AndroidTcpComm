@@ -41,7 +41,6 @@ public class M {
 	}
 
 	private M() {
-		// board = new Board();
 	}
 
 	public static M m() {
@@ -205,4 +204,5 @@ public class M {
 	public void setAppIsActive(boolean appIsActive) {
 		this.appIsActive = appIsActive;
 	}
+
 }

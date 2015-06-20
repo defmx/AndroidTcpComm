@@ -11,7 +11,7 @@
     <string name="title_section2">Metas</string>
     <string name="title_section3">Parámetros</string>
     <string name="title_section4">Gráfica</string>
-    <string name="title_section5">Paros</string>
+    <string name="title_section5">Reportes</string>
     <string name="send">Enviar</string>
     <string name="goalhint">Enter value</string>
     <string name="connectionfailed">Connection failed</string>
@@ -48,6 +48,14 @@
         <item>Mt</item>
         <item>Mh</item>
     </string-array>
-        <string name="DR">Diamétro de Rueda</string>
-        <string name="graphmessage">Gracias por su preferencia, ésta sección está destinada a generar gráficas, reportes e históricos de producción y exportarlos mediante correo electrónico, pdf o excel; para habilitarlas por favor contacte a su proveedor de servicios.</string>
+    <string-array name="reportmenuitems">
+        <item>Paros</item>
+    </string-array>
+
+    <string name="DR">Diamétro de Rueda</string>
+    <string name="graphmessage">Gracias por su preferencia, ésta sección está destinada a generar gráficas, reportes e históricos de producción y exportarlos mediante correo electrónico, pdf o excel; para habilitarlas por favor contacte a su proveedor de servicios.</string>
+    <string name="daterange">Rango de fechas</string>
+    <string name="variable">Variable</string>
+    <string name="share">Compartir</string>
+
 </resources>

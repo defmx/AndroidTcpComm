@@ -12,6 +12,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -21,22 +22,23 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.iek.wiflyremote.data.LocalDb;
 import com.iek.wiflyremote.stat.M;
 import com.iek.wiflyremote.stat.Receiver3;
 import com.iek.wiflyremote.ui.GoalsFragment;
 import com.iek.wiflyremote.ui.GraphicFragment;
 import com.iek.wiflyremote.ui.NavigationDrawerFragment;
 import com.iek.wiflyremote.ui.PreferenceFragment;
+import com.iek.wiflyremote.ui.ReportsFragment;
 import com.iek.wiflyremote.ui.StatisticsFragment;
 
 public class Control extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	public static final int MESSAGE_DATA_RECEIVE = 0;
-
 	private NavigationDrawerFragment mNavigationDrawerFragment;
-
 	private CharSequence mTitle;
 	private ProgressBar mprogBar;
+	private PowerManager.WakeLock mWakeLock;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +52,14 @@ public class Control extends Activity implements
 
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+		M.m().setLocaldb(new LocalDb(this, "iekdb", null, 1));
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -68,11 +71,19 @@ public class Control extends Activity implements
 		}
 		M.m().disconnect();
 		M.m().setAppIsActive(false);
+		try {
+			this.mWakeLock.release();
+		} catch (Exception e) {
+		}
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
+		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+				"My Tag");
+		this.mWakeLock.acquire();
 		M.m().setAppIsActive(true);
 		mprogBar.setVisibility(View.GONE);
 		M.m().connect(new Observer() {
@@ -98,26 +109,24 @@ public class Control extends Activity implements
 					AlarmManager alarm = (AlarmManager) Control.this
 							.getSystemService(Context.ALARM_SERVICE);
 					alarm.setRepeating(AlarmManager.RTC_WAKEUP, 0, 90000,
-							pendingIntent);		
+							pendingIntent);
 				} else if (data.equals("f")) {
 					runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
 							Toast.makeText(getApplicationContext(),
-									"Conexión no establecida", Toast.LENGTH_SHORT)
-									.show();
+									"Conexión no establecida",
+									Toast.LENGTH_SHORT).show();
 						}
 
 					});
-//					finish();
+					// finish();
 				}
 			}
 		});
 	}
 
-	
-	
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		Fragment f = null;
@@ -133,6 +142,9 @@ public class Control extends Activity implements
 			break;
 		case 3:
 			f = new PreferenceFragment();
+			break;
+		case 4:
+			f = new ReportsFragment();
 			break;
 		default:
 			return;
@@ -179,7 +191,5 @@ public class Control extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
 
 }
