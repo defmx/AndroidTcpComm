@@ -6,7 +6,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +15,14 @@
         android:orientation="vertical" >
         
         <requestFocus />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KINEX WIMOTE"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_view_text_size"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etxtIP"

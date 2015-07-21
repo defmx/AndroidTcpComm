@@ -54,11 +54,11 @@ public class StatisticsFragment extends Fragment {
 							@Override
 							public void run() {
 								textRight.setText("\t Velocidad = " + v
-										+ " m/min\n\n" + "\t Vel. Media = "
-										+ vm + " m/min\n\n"
+										+ " piezas/min\n\n" + "\t Vel. Media = "
+										+ vm + " piezas/min\n\n"
 										+ "\t Tiempo Muerto = " + dt
-										+ " min\n\n" + "\t Distancia = " + d
-										+ " m");
+										+ " min\n\n" + "\t Contador = " + d
+										+ " piezas");
 							}
 						});
 					}

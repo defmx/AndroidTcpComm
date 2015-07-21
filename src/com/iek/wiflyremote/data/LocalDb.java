@@ -30,7 +30,7 @@ public class LocalDb extends SQLiteOpenHelper {
 		String q3 = "CREATE TABLE IF NOT EXISTS hosts(_id integer primary key autoincrement,name text unique,value text)";
 		String q2 = "CREATE TABLE IF NOT EXISTS cstopreasons(_id integer primary key autoincrement,name text unique,value text)";
 		String q4 = "CREATE TABLE IF NOT EXISTS statistics(_id integer primary key autoincrement,utime integer,v real,vm real,dt real,d real)";
-		String q5 = "CREATE TABLE IF NOT EXISTS stops(_id integer primary key,uid text,start_time text,end_time text,reason_id,length integer)";
+		String q5 = "CREATE TABLE IF NOT EXISTS stops(_id integer primary key autoincrement,start_time text,end_time text,reason_id)";
 		try {
 			if (db.isOpen()) {
 				db.execSQL(q1);
@@ -49,8 +49,8 @@ public class LocalDb extends SQLiteOpenHelper {
 
 	}
 
-	public int insOrUpd(String table, ContentValues cv, String where) {
-		int count = 0;
+	public long insOrUpd(String table, ContentValues cv, String where) {
+		long r = 0;
 		if (cv.containsKey("_id")) {
 			cv.remove("_id");
 		}
@@ -59,17 +59,15 @@ public class LocalDb extends SQLiteOpenHelper {
 			if (!cv.containsKey("_id")) {
 				if (cv.containsKey("name")) {
 					String n = cv.getAsString("name");
-					count = db.update(table, cv, "name=?", new String[] { n });
-					if (count == 0) {
-						db.insert(table, null, cv);
-						count = 1;
+					r = db.update(table, cv, "name=?", new String[] { n });
+					if (r == 0) {
+						r = db.insert(table, null, cv);
 					}
 				} else {
-					db.insert(table, null, cv);
-					count = 1;
+					r = db.insert(table, null, cv);
 				}
 			} else {
-				count = db.update(table, cv, where, null);
+				r = db.update(table, cv, where, null);
 			}
 			db.setTransactionSuccessful();
 		} catch (SQLiteException e) {
@@ -77,8 +75,8 @@ public class LocalDb extends SQLiteOpenHelper {
 		} finally {
 			db.endTransaction();
 		}
-		Log.i("LocalDb", count + " rows affected");
-		return count;
+		Log.i("LocalDb", r + " rows affected");
+		return r;
 	}
 
 	public List<Object[]> select(String table, String where, int limit) {

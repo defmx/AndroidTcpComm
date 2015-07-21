@@ -17,7 +17,7 @@ public class GoalsFragment extends Fragment {
 	private EditText etGAvgVel;
 	private EditText etGLinMet;
 	private EditText etGDeadT;
-	private EditText etGFactor;
+	//private EditText etGFactor;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,12 +27,12 @@ public class GoalsFragment extends Fragment {
 		etGAvgVel = (EditText) v.findViewById(R.id.etGAvgVel);
 		etGLinMet = (EditText) v.findViewById(R.id.etGLinMet);
 		etGDeadT = (EditText) v.findViewById(R.id.etGDeadT);
-		etGFactor = (EditText) v.findViewById(R.id.etGFactor);
+		//etGFactor = (EditText) v.findViewById(R.id.etGFactor);
 		Button btGInstVel = (Button) v.findViewById(R.id.btGInstVel);
 		Button btGAvgVel = (Button) v.findViewById(R.id.btGAvgVel);
 		Button btGLinMet = (Button) v.findViewById(R.id.btGLinMet);
 		Button btGDeadT = (Button) v.findViewById(R.id.btGDeadT);
-		Button btGFactor = (Button) v.findViewById(R.id.btGFactor);
+		//Button btGFactor = (Button) v.findViewById(R.id.btGFactor);
 
 		btGInstVel.setOnClickListener(new OnClickListener() {
 
@@ -94,25 +94,7 @@ public class GoalsFragment extends Fragment {
 				}
 			}
 		}); 
-		btGFactor.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				int i;
-				double d;
-				try {
-					d = Double.parseDouble(etGFactor.getText().toString());
-					if (d <= 0)
-						return;
-					d *= 2.5415191;
-					d *= 10;
-					i = (int) d;
-				} catch (NumberFormatException e) {
-					return;
-				}
-				M.m().sendMessage(null, "F" + String.format("%05d", i));
-			}
-		});
+		
 
 		return v;
 	}

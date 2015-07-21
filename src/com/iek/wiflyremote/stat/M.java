@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
+import java.util.Random;
+import java.util.UUID;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,6 +33,7 @@ public class M {
 	private Socket globalSocket;
 	private LocalDb localdb;
 	private Thread listenThr;
+	private long mStopId;
 	private boolean appIsActive;
 
 	public Socket getGlobalSocket() {
@@ -82,10 +85,22 @@ public class M {
 									try {
 										final String s = ostream.toString(
 												"UTF-8").replace("\n", "");
-										if (s.startsWith("¡")) {
-											ContentValues cv=new ContentValues();
-											cv.put("start_time", System.currentTimeMillis());
-											getLocaldb().insOrUpd("stops", cv, null);
+										if (s.startsWith("?")) {
+											mStopId = new Random().nextLong();
+											ContentValues cv = new ContentValues();
+											cv.put("uid", mStopId);
+											cv.put("start_time",
+													System.currentTimeMillis());
+											getLocaldb().insOrUpd("stops", cv,
+													null);
+										}
+										if (s.startsWith("!")) {
+											ContentValues cv = new ContentValues();
+											cv.put("uid", mStopId);
+											cv.put("end_time",
+													System.currentTimeMillis());
+											getLocaldb().insOrUpd("stops", cv,
+													null);
 										}
 										Log.i("SVRRESP", s);
 										for (Observer obs : boardRespObservers) {

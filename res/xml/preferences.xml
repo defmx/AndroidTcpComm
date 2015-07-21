@@ -47,5 +47,9 @@
             android:key="pref_shift3"
             android:title="@string/shiftthree" />
     </PreferenceCategory>
+    <PreferenceCategory android:key="adv" android:title="@string/advance">
+        <EditTextPreference android:key="adv_1" android:title="@string/timemax"/>
+        <EditTextPreference android:key="adv_2" android:title="@string/adjustFactor"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>

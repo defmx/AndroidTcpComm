@@ -14,10 +14,10 @@
     <string name="title_section5">Reportes</string>
     <string name="send">Enviar</string>
     <string name="goalhint">Enter value</string>
-    <string name="connectionfailed">Connection failed</string>
+    <string name="connectionfailed">Falló Conexión</string>
     <string name="instantspeed">Velocidad instantánea</string>
     <string name="averagespeed">Velocidad promedio</string>
-    <string name="linearmetersperturn">Metros lineales por turno</string>
+    <string name="linearmetersperturn">Piezas por turno</string>
     <string name="deadtime">Tiempo muerto</string>
     <string name="factor">Factor</string>
     <string name="syncclock">Sincronizar reloj</string>
@@ -25,7 +25,7 @@
     <string name="auto">Automático</string>
     <string name="lastsync">Última sincronización: ninguna</string>
     <string name="shiftsend">Fin de Turno</string>
-    <string name="shiftslen">Duración de Turnos</string>
+    <string name="shiftslen">Duración de Turnos (minutos)</string>
     <string name="shiftone">Turno 1</string>
     <string name="shifttwo">Turno 2</string>
     <string name="shiftthree">Turno 3</string>
@@ -36,7 +36,7 @@
         <item>Automático</item>
         <item>Velocidad instantánea</item>
         <item>Velocidad promedio</item>
-        <item>Metros lineales</item>
+        <item>Contador Piezas</item>
         <item>Tiempo muerto</item>
         <item>Hora</item>
     </string-array>
@@ -52,10 +52,13 @@
         <item>Paros</item>
     </string-array>
 
-    <string name="DR">Diamétro de Rueda</string>
+    <string name="DR">Factor Ajuste</string>
     <string name="graphmessage">Gracias por su preferencia, ésta sección está destinada a generar gráficas, reportes e históricos de producción y exportarlos mediante correo electrónico, pdf o excel; para habilitarlas por favor contacte a su proveedor de servicios.</string>
     <string name="daterange">Rango de fechas</string>
     <string name="variable">Variable</string>
     <string name="share">Compartir</string>
+    <string name="advance">Avanzado</string>
+    <string name="timemax">Tiempo máximo de muestreo</string>
+    <string name="adjustFactor">Factor de Ajuste</string>
 
 </resources>

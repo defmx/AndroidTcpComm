@@ -147,11 +147,11 @@ public class GraphicFragment extends Fragment {
 
 		LineDataSet lineDataSet1 = new LineDataSet(valueSet1, "Tiempo muerto");
 		lineDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
-		LineDataSet lineDataSet2 = new LineDataSet(valueSet2, "Vel media");
+		LineDataSet lineDataSet2 = new LineDataSet(valueSet2, "Vel promedio");
 		lineDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
 		LineDataSet lineDataSet3 = new LineDataSet(valueSet3, "Vel");
 		lineDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
-		LineDataSet lineDataSet4 = new LineDataSet(valueSet4, "Distancia");
+		LineDataSet lineDataSet4 = new LineDataSet(valueSet4, "Piezas");
 		lineDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
 
 		dataSets = new ArrayList<LineDataSet>();
