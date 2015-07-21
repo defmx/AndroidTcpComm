@@ -51,9 +51,6 @@ public class LocalDb extends SQLiteOpenHelper {
 
 	public long insOrUpd(String table, ContentValues cv, String where) {
 		long r = 0;
-		if (cv.containsKey("_id")) {
-			cv.remove("_id");
-		}
 		try {
 			db.beginTransaction();
 			if (!cv.containsKey("_id")) {
@@ -67,7 +64,11 @@ public class LocalDb extends SQLiteOpenHelper {
 					r = db.insert(table, null, cv);
 				}
 			} else {
-				r = db.update(table, cv, where, null);
+				if (cv.containsKey("_id")) {
+					long id = cv.getAsLong("_id");
+					cv.remove("_id");
+					db.update(table, cv, "_id=?", new String[] { "" + id });
+				}
 			}
 			db.setTransactionSuccessful();
 		} catch (SQLiteException e) {

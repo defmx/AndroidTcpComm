@@ -86,17 +86,15 @@ public class M {
 										final String s = ostream.toString(
 												"UTF-8").replace("\n", "");
 										if (s.startsWith("?")) {
-											mStopId = new Random().nextLong();
 											ContentValues cv = new ContentValues();
-											cv.put("uid", mStopId);
 											cv.put("start_time",
 													System.currentTimeMillis());
-											getLocaldb().insOrUpd("stops", cv,
-													null);
+											mStopId = getLocaldb().insOrUpd(
+													"stops", cv, null);
 										}
 										if (s.startsWith("!")) {
 											ContentValues cv = new ContentValues();
-											cv.put("uid", mStopId);
+											cv.put("_id", mStopId);
 											cv.put("end_time",
 													System.currentTimeMillis());
 											getLocaldb().insOrUpd("stops", cv,
