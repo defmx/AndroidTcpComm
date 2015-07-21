@@ -85,20 +85,21 @@ public class M {
 									try {
 										final String s = ostream.toString(
 												"UTF-8").replace("\n", "");
-										if (s.startsWith("?")) {
+										if (s.contains("?")) {
 											ContentValues cv = new ContentValues();
 											cv.put("start_time",
 													System.currentTimeMillis());
 											mStopId = getLocaldb().insOrUpd(
 													"stops", cv, null);
 										}
-										if (s.startsWith("!")) {
+										if (s.contains("!") && mStopId != 0) {
 											ContentValues cv = new ContentValues();
 											cv.put("_id", mStopId);
 											cv.put("end_time",
 													System.currentTimeMillis());
 											getLocaldb().insOrUpd("stops", cv,
 													null);
+											mStopId = 0;
 										}
 										Log.i("SVRRESP", s);
 										for (Observer obs : boardRespObservers) {
