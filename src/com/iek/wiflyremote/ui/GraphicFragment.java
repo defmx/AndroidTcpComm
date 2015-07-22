@@ -101,7 +101,7 @@ public class GraphicFragment extends Fragment {
 		} else {
 			where = String.format(where, "" + timeInMillis, "" + timeInMillis2);
 		}
-		List<Object[]> tbl = M.m().getLocaldb().select("statistics", where, 100);
+		List<Object[]> tbl = M.m().getLocaldb().select("statistics", where, 480);
 		for (int i = 0; i < tbl.size(); i++) {
 			data.addXValue("");
 		}

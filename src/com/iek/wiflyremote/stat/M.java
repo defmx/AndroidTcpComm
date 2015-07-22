@@ -35,6 +35,7 @@ public class M {
 	private Thread listenThr;
 	private long mStopId;
 	private boolean appIsActive;
+	private long sttime = 0;
 
 	public Socket getGlobalSocket() {
 		return globalSocket;
@@ -85,10 +86,38 @@ public class M {
 									try {
 										final String s = ostream.toString(
 												"UTF-8").replace("\n", "");
+										///
+										if (s.startsWith("P#=") && !s.contains("C")) {
+											if (sttime == 0) {
+												sttime = System.currentTimeMillis();
+											}
+											String str = s.replace("P#=", "");
+											String[] parts;
+										parts = str.split(",");
+										if(parts.length==4){
+											//double v = Double.parseDouble(parts[0]);
+											//double vm = Double.parseDouble(parts[1]);
+											//double dt = Double.parseDouble(parts[2]);
+											//double d = Double.parseDouble(parts[3]);
+											long t = System.currentTimeMillis();
+											if (t - sttime >= 60000) {
+												sttime = 0;
+												ContentValues cv = new ContentValues();
+												cv.put("utime", t/1000);
+												cv.put("v", parts[0]);
+												cv.put("vm", parts[1]);
+												cv.put("dt", parts[2]);
+												cv.put("d", parts[3]);
+												M.m().getLocaldb().insOrUpd("statistics", cv, "");
+											}
+										}
+										}
+										
+										///
 										if (s.contains("?")) {
 											ContentValues cv = new ContentValues();
 											cv.put("start_time",
-													System.currentTimeMillis());
+													System.currentTimeMillis()/1000);
 											mStopId = getLocaldb().insOrUpd(
 													"stops", cv, null);
 										}
@@ -96,7 +125,7 @@ public class M {
 											ContentValues cv = new ContentValues();
 											cv.put("_id", mStopId);
 											cv.put("end_time",
-													System.currentTimeMillis());
+													System.currentTimeMillis()/1000);
 											getLocaldb().insOrUpd("stops", cv,
 													null);
 											mStopId = 0;
